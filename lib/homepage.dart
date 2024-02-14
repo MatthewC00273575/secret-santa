@@ -24,7 +24,7 @@ class _HomePageState extends State<HomePage> {
           tabs: [
             GButton(icon: Icons.home, text: 'Home'),
             GButton(icon: Icons.favorite_border, text: 'Wish List'),
-            GButton(icon: Icons.search),
+            GButton(icon: Icons.search, text: 'Search'),
             GButton(icon: Icons.settings, text: 'Settings'),
           ],
         ),
