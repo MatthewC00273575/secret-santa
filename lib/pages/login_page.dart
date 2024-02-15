@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:secretsanta/components/my_button.dart';
 import 'package:secretsanta/components/my_textfield.dart';
+import 'package:secretsanta/components/square_tile.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
@@ -8,23 +10,27 @@ class LoginPage extends StatelessWidget {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
 
+  // sign user in method
+  void signUserIn() {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: const Color.fromARGB(255, 211, 210, 210),
+        backgroundColor: const Color.fromARGB(255, 226, 226, 226),
         body: SafeArea(
           child: Center(
             child: Column(children: [
-              const SizedBox(height: 50),
+              const SizedBox(height: 30),
               // logo
-              const Icon(Icons.lock, size: 100), // icon
+              Image.asset('lib/images/christmas-icon-png-17.jpg',
+                  height: 150), // logo
 
-              const SizedBox(height: 50),
+              const SizedBox(height: 30),
 
               // welcome message
-              const Text('Welcome back To Santa\'s little helper',
+              const Text('Welcome back To Santa\'s little helper!',
                   style: TextStyle(
-                    color: Color.fromARGB(255, 64, 216, 5),
+                    color: Color.fromARGB(255, 45, 210, 4),
                     fontSize: 16,
                   )),
 
@@ -34,7 +40,7 @@ class LoginPage extends StatelessWidget {
                 controller: usernameController,
                 hintText: 'Username',
                 obscureText: false,
-              ), // Textfield
+              ), // Textfield //username
 
               const SizedBox(height: 10),
 
@@ -42,8 +48,69 @@ class LoginPage extends StatelessWidget {
                 controller: passwordController,
                 hintText: 'password',
                 obscureText: true,
-              ), // TextField
-              //username
+              ), // TextField // Password
+
+              const SizedBox(height: 10),
+
+              // forgot password?
+              const Text(
+                'Forgot Password?',
+                style: TextStyle(color: Color.fromARGB(255, 112, 111, 111)),
+              ),
+
+              const SizedBox(height: 25),
+
+              MyButton(
+                onTap: signUserIn,
+              ),
+
+              const SizedBox(height: 25),
+
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 25.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Divider(
+                        thickness: 0.5,
+                        color: Color.fromARGB(255, 158, 158, 158),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Text(
+                        'Or continue with',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ),
+                    Expanded(
+                      child: Divider(
+                        thickness: 0.5,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              // google + facebook sign in buttons
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  //google button
+                  SquareTile(
+                      imagePath:
+                          'lib/images/google-icon-logo-png-transparent_53892.png'),
+
+                  SizedBox(width: 10),
+
+                  //facebook button
+                  SquareTile(
+                      imagePath: 'lib/images/downloading-facebook-icon-10.jpg'),
+                ],
+              )
             ]),
           ),
         ));
