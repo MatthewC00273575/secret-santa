@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "621495135806",
+    "project_id": "secretsantadb-ad295",
+    "storage_bucket": "secretsantadb-ad295.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:621495135806:android:8887c9dc38fb7e917fab6f",
+        "android_client_info": {
+          "package_name": "com.example.secretsanta"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJDSKs5dzNFYAVpd6FN3U5llyzBIHDaI4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

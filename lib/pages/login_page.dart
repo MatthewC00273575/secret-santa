@@ -20,7 +20,7 @@ class LoginPage extends StatelessWidget {
         body: SafeArea(
           child: Center(
             child: Column(children: [
-              const SizedBox(height: 30),
+              const SizedBox(height: 10),
               // logo
               Image.asset('lib/images/christmas-icon-png-17.jpg',
                   height: 150), // logo
@@ -109,6 +109,25 @@ class LoginPage extends StatelessWidget {
                   //facebook button
                   SquareTile(
                       imagePath: 'lib/images/downloading-facebook-icon-10.jpg'),
+                ],
+              ),
+
+              const SizedBox(height: 15),
+
+              // not a member? REGISTER!!
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Not a member?',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    'Register now',
+                    style: TextStyle(
+                        color: Colors.blue, fontWeight: FontWeight.bold),
+                  ),
                 ],
               )
             ]),

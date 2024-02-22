@@ -15,7 +15,7 @@ class SquareTile extends StatelessWidget {
           border: Border.all(color: Colors.white),
           borderRadius: BorderRadius.circular(16),
           color: Color.fromARGB(255, 240, 240, 240)),
-      child: Image.asset(imagePath, height: 35),
+      child: Image.asset(imagePath, height: 20),
     );
   }
 }
