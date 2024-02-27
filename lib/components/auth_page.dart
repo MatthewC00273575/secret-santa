@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:secretsanta/pages/homepage.dart';
+import 'package:secretsanta/navigation.dart';
 import 'package:secretsanta/pages/login_page.dart';
 
 class AuthPage extends StatelessWidget {
@@ -14,7 +14,7 @@ class AuthPage extends StatelessWidget {
         builder: (context, snapshot) {
           // user is logged in
           if (snapshot.hasData) {
-            return HomePage();
+            return MyNavigation();
           }
 
           //user is not logged in
