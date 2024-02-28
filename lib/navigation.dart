@@ -28,12 +28,12 @@ class _HomePageState extends State<MyNavigation> {
     return Scaffold(
       body: _pages[_selectedIndex], // Display the selected page
       bottomNavigationBar: Container(
-        color: const Color.fromARGB(255, 255, 255, 255),
+        color: const Color.fromARGB(255, 241, 233, 230),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20),
           child: GNav(
-            backgroundColor: Color.fromARGB(255, 255, 255, 255),
-            tabBackgroundColor: Color.fromARGB(167, 255, 210, 7),
+            backgroundColor: const Color.fromARGB(255, 241, 233, 230),
+            tabBackgroundColor: Color.fromARGB(255, 170, 230, 115),
             padding: const EdgeInsets.all(16),
             gap: 8,
             tabs: const [
