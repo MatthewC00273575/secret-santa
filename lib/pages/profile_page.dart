@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:secretsanta/pages/creategroup.dart';
 
 class MyProfile extends StatelessWidget {
   const MyProfile({super.key});
@@ -69,7 +70,11 @@ class MyProfile extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  // Add logic here
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const CreateGroup()),
+                  );
                 },
               ),
 
