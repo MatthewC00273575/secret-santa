@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:secretsanta/pages/creategroup.dart';
 import 'package:secretsanta/pages/homepage.dart';
 import 'package:secretsanta/pages/inbox_page.dart';
 import 'package:secretsanta/pages/profile_page.dart';
@@ -22,7 +21,6 @@ class _HomePageState extends State<MyNavigation> {
     MyWishlist(),
     MyInbox(),
     MyProfile(),
-    CreateGroup()
   ];
 
   @override

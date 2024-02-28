@@ -37,7 +37,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   google_nav_bar: ^5.0.6
   google_fonts: ^6.1.0
-  firebase_core: ^2.25.4
+  firebase_core: ^2.25.5
+  firebase_database: ^10.4.7
   firebase_auth: ^4.17.4
 
 dev_dependencies:

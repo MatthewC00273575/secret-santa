@@ -72,8 +72,7 @@ class MyProfile extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => const CreateGroup()),
+                    MaterialPageRoute(builder: (context) => CreateGroup()),
                   );
                 },
               ),
