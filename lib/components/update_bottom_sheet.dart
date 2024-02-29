@@ -5,7 +5,7 @@ final TextEditingController nameController = TextEditingController();
 final TextEditingController snController = TextEditingController();
 final TextEditingController emailController = TextEditingController();
 
-void createBottomSheet(BuildContext context) {
+void updateBottomSheet(BuildContext context, name, id, dn, email) {
   showModalBottomSheet(
       isScrollControlled: true,
       backgroundColor: const Color.fromARGB(255, 241, 233, 230),
