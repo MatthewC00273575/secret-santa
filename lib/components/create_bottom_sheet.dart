@@ -56,12 +56,14 @@ void createBottomSheet(BuildContext context) {
               ElevatedButton(
                   onPressed: () {
                     final id = DateTime.now().microsecond.toString();
-                    databaseReference.child(id).set({
+                    dbrefefence.child(id).set({
                       'name': nameController.text.toString(),
                       'sn': snController.text.toString(),
-                      'address': emailController.text.toString(),
+                      'email': emailController.text.toString(),
                       'id': id,
                     });
+                    // For Read/Display operation
+
                     // For clear the controller
                     nameController.clear();
                     snController.clear();

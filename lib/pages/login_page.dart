@@ -33,7 +33,7 @@ class LoginPage extends StatelessWidget {
               const SizedBox(height: 30),
 
               // welcome message
-              const Text('Welcome back To Santa\'s little helper!',
+              const Text('Welcome back Santa\'s little helper!',
                   style: TextStyle(
                     color: Color.fromARGB(255, 45, 210, 4),
                     fontSize: 16,

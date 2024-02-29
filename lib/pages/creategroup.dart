@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:secretsanta/components/create_bottom_sheet.dart';
@@ -9,7 +11,10 @@ class CreateGroup extends StatefulWidget {
   State<CreateGroup> createState() => _CreateGroupState();
 }
 
-final databaseReference = FirebaseDatabase.instance.ref();
+final dbrefefence = FirebaseDatabase(
+  databaseURL:
+      'https://secretsantadb-ad295-default-rtdb.europe-west1.firebasedatabase.app/',
+).reference();
 
 class _CreateGroupState extends State<CreateGroup> {
   @override
