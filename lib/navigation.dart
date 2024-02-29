@@ -33,7 +33,7 @@ class _HomePageState extends State<MyNavigation> {
           padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20),
           child: GNav(
             backgroundColor: const Color.fromARGB(255, 241, 233, 230),
-            tabBackgroundColor: Color.fromARGB(255, 170, 230, 115),
+            tabBackgroundColor: const Color.fromARGB(255, 170, 230, 115),
             padding: const EdgeInsets.all(16),
             gap: 8,
             tabs: const [

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:secretsanta/pages/creategroup.dart';
 
 final TextEditingController nameController = TextEditingController();
-final TextEditingController snController = TextEditingController();
+final TextEditingController mnController = TextEditingController();
 final TextEditingController emailController = TextEditingController();
 
 void createBottomSheet(BuildContext context) {
@@ -24,7 +24,7 @@ void createBottomSheet(BuildContext context) {
             children: [
               const Center(
                 child: Text(
-                  "Create your items",
+                  "Add member",
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -39,13 +39,15 @@ void createBottomSheet(BuildContext context) {
                 ),
               ),
               TextField(
-                controller: snController,
+                keyboardType: TextInputType.number,
+                controller: mnController,
                 decoration: const InputDecoration(
-                  labelText: "S.N",
+                  labelText: "member no.",
                   hintText: "eg.1",
                 ),
               ),
               TextField(
+                keyboardType: TextInputType.emailAddress,
                 controller: emailController,
                 decoration: const InputDecoration(
                   labelText: "email",
@@ -58,13 +60,13 @@ void createBottomSheet(BuildContext context) {
                     final id = DateTime.now().microsecond.toString();
                     dbrefefence.child(id).set({
                       'name': nameController.text.toString(),
-                      'sn': snController.text.toString(),
+                      'mn': mnController.text.toString(),
                       'email': emailController.text.toString(),
                       'id': id,
                     });
-                    // For clear the controller
+                    // For clearing the controllers
                     nameController.clear();
-                    snController.clear();
+                    mnController.clear();
                     emailController.clear();
                     // dismiss keyboard after adding items
                     Navigator.pop(context);

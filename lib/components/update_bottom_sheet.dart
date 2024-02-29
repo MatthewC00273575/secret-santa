@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:secretsanta/components/create_bottom_sheet.dart';
 import 'package:secretsanta/pages/creategroup.dart';
 
-final TextEditingController nameController = TextEditingController();
-final TextEditingController snController = TextEditingController();
-final TextEditingController emailController = TextEditingController();
+void updateBottomSheet(BuildContext context, name, id, mn, email) {
+  nameController.text = name;
+  mnController.text = mn;
+  emailController.text = email;
 
-void updateBottomSheet(BuildContext context, name, id, dn, email) {
   showModalBottomSheet(
       isScrollControlled: true,
       backgroundColor: const Color.fromARGB(255, 241, 233, 230),
@@ -24,7 +25,7 @@ void updateBottomSheet(BuildContext context, name, id, dn, email) {
             children: [
               const Center(
                 child: Text(
-                  "Create your items",
+                  "Add member",
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -39,13 +40,15 @@ void updateBottomSheet(BuildContext context, name, id, dn, email) {
                 ),
               ),
               TextField(
-                controller: snController,
+                keyboardType: TextInputType.number,
+                controller: mnController,
                 decoration: const InputDecoration(
-                  labelText: "S.N",
+                  labelText: "member no.",
                   hintText: "eg.1",
                 ),
               ),
               TextField(
+                keyboardType: TextInputType.emailAddress,
                 controller: emailController,
                 decoration: const InputDecoration(
                   labelText: "email",
@@ -55,21 +58,15 @@ void updateBottomSheet(BuildContext context, name, id, dn, email) {
               const SizedBox(height: 20),
               ElevatedButton(
                   onPressed: () {
-                    final id = DateTime.now().microsecond.toString();
-                    dbrefefence.child(id).set({
+                    dbrefefence.child(id).update({
                       'name': nameController.text.toString(),
-                      'sn': snController.text.toString(),
+                      'mn': mnController.text.toString(),
                       'email': emailController.text.toString(),
-                      'id': id,
                     });
-                    // For clear the controller
-                    nameController.clear();
-                    snController.clear();
-                    emailController.clear();
                     // dismiss keyboard after adding items
                     Navigator.pop(context);
                   },
-                  child: const Text("add"))
+                  child: const Text("Update"))
             ],
           ),
         );

@@ -4,6 +4,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:secretsanta/components/create_bottom_sheet.dart';
+import 'package:secretsanta/components/update_bottom_sheet.dart';
 
 class CreateGroup extends StatefulWidget {
   const CreateGroup({super.key});
@@ -38,33 +39,81 @@ class _CreateGroupState extends State<CreateGroup> {
               child: FirebaseAnimatedList(
                   query: dbrefefence,
                   itemBuilder: (context, snapshot, index, animation) {
-                    return ListTile(
-                        title: Text(snapshot.child("name").value.toString()),
-                        subtitle:
-                            Text(snapshot.child("email").value.toString()),
-                        leading: Text(snapshot.child("sn").value.toString()),
-                        trailing: PopupMenuButton(
-                            icon: const Icon(Icons.more_vert),
-                            itemBuilder: (context) => [
-                                  // For update operation
-                                  PopupMenuItem(
-                                    value: 1,
-                                    child: ListTile(
-                                      onTap: () {},
-                                      leading: const Icon(Icons.edit),
-                                      title: const Text("edit"),
+                    return Card(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                      margin: const EdgeInsets.all(10),
+                      child: ListTile(
+                          title: Text(
+                            snapshot
+                                .child("name")
+                                .value
+                                .toString(), //get a single value from db
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          ),
+                          subtitle:
+                              Text(snapshot.child("email").value.toString()),
+                          leading: CircleAvatar(
+                              backgroundColor:
+                                  const Color.fromARGB(255, 170, 230, 115),
+                              child:
+                                  Text(snapshot.child("mn").value.toString())),
+                          trailing: PopupMenuButton(
+                              icon: const Icon(Icons.more_vert),
+                              itemBuilder: (context) => [
+                                    // For update operation
+                                    PopupMenuItem(
+                                      value: 1,
+                                      child: ListTile(
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                          updateBottomSheet(
+                                            context,
+                                            snapshot
+                                                .child("name")
+                                                .value
+                                                .toString(),
+                                            snapshot
+                                                .child("id")
+                                                .value
+                                                .toString(),
+                                            snapshot
+                                                .child("mn")
+                                                .value
+                                                .toString(),
+                                            snapshot
+                                                .child("email")
+                                                .value
+                                                .toString(),
+                                          );
+                                        },
+                                        leading: const Icon(Icons.edit),
+                                        title: const Text("edit"),
+                                      ),
                                     ),
-                                  ),
-                                  // For the delete
-                                  PopupMenuItem(
-                                    value: 2,
-                                    child: ListTile(
-                                      onTap: () {},
-                                      leading: const Icon(Icons.delete),
-                                      title: const Text("delete"),
+                                    // For the delete
+                                    PopupMenuItem(
+                                      value: 2,
+                                      child: ListTile(
+                                        onTap: () {
+                                          Navigator.pop(
+                                              context); // close sheet when done
+                                          dbrefefence
+                                              .child(snapshot
+                                                  .child('id')
+                                                  .value
+                                                  .toString())
+                                              .remove();
+                                        },
+                                        leading: const Icon(Icons.delete),
+                                        title: const Text("delete"),
+                                      ),
                                     ),
-                                  ),
-                                ]));
+                                  ])),
+                    );
                   })),
         ],
       ),
