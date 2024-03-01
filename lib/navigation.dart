@@ -16,11 +16,11 @@ class _HomePageState extends State<MyNavigation> {
   int _selectedIndex = 0; // To keep track of the selected tab index
 
   // List of pages you want to navigate to
-  final List<Widget> _pages = const [
+  final List<Widget> _pages = [
     HomePage(),
-    MyWishlist(),
-    MyInbox(),
-    MyProfile(),
+    const MyWishlist(),
+    const MyInbox(),
+    const MyProfile(),
   ];
 
   @override

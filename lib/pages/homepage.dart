@@ -1,14 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomePage extends StatelessWidget {
+  HomePage({super.key});
+  final user = FirebaseAuth.instance.currentUser!;
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
   // sign user out method
   void signUserOut() {
     FirebaseAuth.instance.signOut();
@@ -48,6 +44,7 @@ class _HomePageState extends State<HomePage> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
                       color: const Color.fromARGB(255, 11, 95, 15)),
+                  // sign out
                   child: IconButton(
                     onPressed: signUserOut,
                     icon: const Icon(Icons.logout),
@@ -57,16 +54,18 @@ class _HomePageState extends State<HomePage> {
               ],
             )
           ]),
+        ),
+        Row(
+          children: [
+            Padding(
+                padding: const EdgeInsets.all(5),
+                child: Text(
+                  "LOGGED IN AS: ${user.email!}",
+                  style: const TextStyle(fontSize: 12),
+                )),
+          ],
         )
       ]),
-
-      // logout
-      /*appBar: AppBar(actions: [
-          IconButton(
-            onPressed: signUserOut,
-            icon: const Icon(Icons.logout),
-          )
-        ]),*/
     );
   }
 }

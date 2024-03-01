@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:secretsanta/components/login_or_register.dart';
 import 'package:secretsanta/navigation.dart';
-import 'package:secretsanta/pages/login_page.dart';
 
 class AuthPage extends StatelessWidget {
   const AuthPage({super.key});
@@ -14,12 +14,12 @@ class AuthPage extends StatelessWidget {
         builder: (context, snapshot) {
           // user is logged in
           if (snapshot.hasData) {
-            return MyNavigation();
+            return const MyNavigation();
           }
 
           //user is not logged in
           else {
-            return LoginPage();
+            return const LoginOrRegisterPage();
           }
         },
       ),
