@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:secretsanta/pages/creategroup.dart';
+import 'package:secretsanta/pages/groupnamepage.dart';
 
 class MyProfile extends StatelessWidget {
   const MyProfile({super.key});
@@ -11,7 +11,7 @@ class MyProfile extends StatelessWidget {
             'Secret Santa',
             style: TextStyle(color: Color.fromARGB(255, 210, 83, 83)),
           ),
-          backgroundColor: Color.fromARGB(240, 49, 29, 19),
+          backgroundColor: const Color.fromARGB(240, 49, 29, 19),
           centerTitle: true,
         ),
         backgroundColor: const Color.fromARGB(255, 241, 233, 230),
@@ -72,8 +72,7 @@ class MyProfile extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => const CreateGroup()),
+                    MaterialPageRoute(builder: (context) => GroupName()),
                   );
                 },
               ),

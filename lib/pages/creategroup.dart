@@ -7,7 +7,8 @@ import 'package:secretsanta/components/create_bottom_sheet.dart';
 import 'package:secretsanta/components/update_bottom_sheet.dart';
 
 class CreateGroup extends StatefulWidget {
-  const CreateGroup({super.key});
+  final String name;
+  const CreateGroup({Key? key, required this.name}) : super(key: key);
 
   @override
   State<CreateGroup> createState() => _CreateGroupState();
@@ -27,9 +28,13 @@ class _CreateGroupState extends State<CreateGroup> {
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(240, 49, 29, 19),
         centerTitle: true,
-        title: const Text(
-          'Secret Santa',
-          style: TextStyle(color: Color.fromARGB(255, 210, 83, 83)),
+        title: Builder(
+          builder: (BuildContext context) {
+            return Text(
+              widget.name,
+              style: const TextStyle(color: Color.fromARGB(255, 210, 83, 83)),
+            );
+          },
         ),
       ),
       // For Read/Display operation
