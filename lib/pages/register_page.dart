@@ -74,7 +74,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 const SizedBox(height: 10),
                 // logo
                 Image.asset('lib/images/christmas-icon-png-17.jpg',
-                    height: 100), // logo
+                    height: 200), // logo
 
                 const SizedBox(height: 30),
 
@@ -118,55 +118,6 @@ class _RegisterPageState extends State<RegisterPage> {
                 MyButton(text: "Sign up", onTap: signUserUp), // MyButton
 
                 const SizedBox(height: 25),
-
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Divider(
-                          thickness: 0.5,
-                          color: Color.fromARGB(255, 158, 158, 158),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Text(
-                          'Or continue with',
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      ),
-                      Expanded(
-                        child: Divider(
-                          thickness: 0.5,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 20),
-
-                // google + facebook sign in buttons
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    //google button
-                    SquareTile(
-                        imagePath:
-                            'lib/images/google-icon-logo-png-transparent_53892.png'),
-
-                    SizedBox(width: 10),
-
-                    //facebook button
-                    SquareTile(
-                        imagePath:
-                            'lib/images/downloading-facebook-icon-10.jpg'),
-                  ],
-                ),
-
-                const SizedBox(height: 15),
 
                 // already got an account? return to log in
                 Row(
