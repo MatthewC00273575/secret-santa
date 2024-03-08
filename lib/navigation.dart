@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:secretsanta/pages/homepage.dart';
 import 'package:secretsanta/pages/inbox_page.dart';
-import 'package:secretsanta/pages/profile_page.dart';
+import 'package:secretsanta/pages/create_group_screen.dart';
 import 'package:secretsanta/pages/wishlist_page.dart';
 
 class MyNavigation extends StatefulWidget {
@@ -16,11 +16,11 @@ class _HomePageState extends State<MyNavigation> {
   int _selectedIndex = 0; // To keep track of the selected tab index
 
   // List of pages you want to navigate to
-  final List<Widget> _pages = [
+  final List<Widget> _pages = const [
     HomePage(),
-    const MyWishlist(),
-    const MyInbox(),
-    const MyProfile(),
+    MyWishlist(),
+    MyInbox(),
+    MeProfile(),
   ];
 
   @override
@@ -28,11 +28,11 @@ class _HomePageState extends State<MyNavigation> {
     return Scaffold(
       body: _pages[_selectedIndex], // Display the selected page
       bottomNavigationBar: Container(
-        color: const Color.fromARGB(255, 241, 233, 230),
+        color: const Color.fromARGB(255, 230, 230, 230),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20),
           child: GNav(
-            backgroundColor: const Color.fromARGB(255, 241, 233, 230),
+            backgroundColor: const Color.fromARGB(255, 230, 230, 230),
             tabBackgroundColor: const Color.fromARGB(255, 170, 230, 115),
             padding: const EdgeInsets.all(16),
             gap: 8,

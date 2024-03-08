@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:secretsanta/pages/groupnamepage.dart';
 
-class MyProfile extends StatelessWidget {
-  const MyProfile({super.key});
+class MeProfile extends StatelessWidget {
+  const MeProfile({super.key});
 
   @override
   Widget build(BuildContext context) => Scaffold(

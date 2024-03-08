@@ -1,8 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:secretsanta/components/drawer.dart';
+import 'package:secretsanta/pages/prof_page.dart';
 
-class HomePage extends StatelessWidget {
-  HomePage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final user = FirebaseAuth.instance.currentUser!;
 
   // sign user out method
@@ -10,62 +18,55 @@ class HomePage extends StatelessWidget {
     FirebaseAuth.instance.signOut();
   }
 
+  // navigate to profile page
+  void goToProfilePage() {
+    // pop menu drawer
+    Navigator.pop(context);
+
+    // go to profile page
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ProfilePage(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(children: [
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 25),
-          alignment: Alignment.bottomCenter,
-          height: 170,
-          decoration:
-              const BoxDecoration(color: Color.fromARGB(255, 12, 121, 15)),
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            const Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  "Welcome to",
-                  style: TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-                Text(
-                  "Secret Santa",
-                  style: TextStyle(fontSize: 17, color: Colors.white),
-                )
-              ],
+      backgroundColor: const Color.fromARGB(255, 230, 230, 230),
+      appBar: AppBar(
+        title: const Padding(
+          padding: EdgeInsets.only(left: 75.0),
+          child: Text(
+            'Secret Santa',
+            style: TextStyle(
+              color: Colors.white,
             ),
-            Row(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: const Color.fromARGB(255, 11, 95, 15)),
-                  // sign out
-                  child: IconButton(
-                    onPressed: signUserOut,
-                    icon: const Icon(Icons.logout),
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            )
-          ]),
+          ),
         ),
-        Row(
-          children: [
-            Padding(
-                padding: const EdgeInsets.all(5),
-                child: Text(
-                  "LOGGED IN AS: ${user.email!}",
-                  style: const TextStyle(fontSize: 12),
-                )),
-          ],
-        )
-      ]),
+        backgroundColor: const Color.fromARGB(255, 28, 28, 28),
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
+
+      // Side menu
+      drawer: MyDrawer(
+        onProfileTap: goToProfilePage,
+        onSignout: signUserOut,
+      ),
+
+      // body
+      body: Column(
+        children: [
+          Padding(
+              padding: const EdgeInsets.all(5),
+              child: Text(
+                "LOGGED IN AS: ${user.email!}",
+                style: const TextStyle(fontSize: 12),
+              )),
+        ],
+      ),
     );
   }
 }
