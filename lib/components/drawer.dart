@@ -39,7 +39,7 @@ class MyDrawer extends StatelessWidget {
             ],
           ),
 
-          //  list tile
+          // Logout list tile
           MyListTile(icon: Icons.logout, text: 'L O G O U T', onTap: onSignout),
         ],
       ),
