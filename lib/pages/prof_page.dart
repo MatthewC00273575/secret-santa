@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:secretsanta/components/text_box.dart';
@@ -18,77 +19,100 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // tiltle
-      appBar: AppBar(
-        title: const Padding(
-          padding: EdgeInsets.only(left: 75.0),
-          child: Text(
-            'Profile page',
-            style: TextStyle(
-              color: Colors.white,
+        // tiltle
+        appBar: AppBar(
+          title: const Padding(
+            padding: EdgeInsets.only(left: 75.0),
+            child: Text(
+              'Profile page',
+              style: TextStyle(
+                color: Colors.white,
+              ),
             ),
           ),
+          backgroundColor: const Color.fromARGB(255, 28, 28, 28),
+          iconTheme: const IconThemeData(color: Colors.white),
         ),
-        backgroundColor: const Color.fromARGB(255, 28, 28, 28),
-        iconTheme: const IconThemeData(color: Colors.white),
-      ),
-      backgroundColor: const Color.fromARGB(255, 230, 230, 230),
+        backgroundColor: const Color.fromARGB(255, 230, 230, 230),
 
-      // Main body
-      body: ListView(
-        children: [
-          const SizedBox(height: 10),
-          // Profile pic
-          const Icon(
-            Icons.person,
-            size: 72,
-          ),
+        // Main body
+        body: StreamBuilder<DocumentSnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection("Users")
+              .doc(currentUser.email)
+              .snapshots(),
+          builder: ((context, snapshot) {
+            // get user data
+            if (snapshot.hasData) {
+              final userData = snapshot.data!.data() as Map<String, dynamic>;
 
-          const SizedBox(height: 10),
+              return ListView(
+                children: [
+                  const SizedBox(height: 10),
+                  // Profile pic
+                  const Icon(
+                    Icons.person,
+                    size: 72,
+                  ),
 
-          // user email
-          Text(
-            currentUser.email!,
-            textAlign: TextAlign.center,
-            style: const TextStyle(color: Color.fromARGB(255, 110, 110, 110)),
-          ),
+                  const SizedBox(height: 10),
 
-          const SizedBox(height: 40),
+                  // user email
+                  Text(
+                    currentUser.email!,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        color: Color.fromARGB(255, 110, 110, 110)),
+                  ),
 
-          // user details
-          const Padding(
-            padding: EdgeInsets.only(left: 25.0),
-            child: Text(
-              'My Details',
-              style: TextStyle(color: Color.fromARGB(255, 110, 110, 110)),
-            ),
-          ),
+                  const SizedBox(height: 40),
 
-          // username
-          MyTextBox(
-            text: 'matt',
-            sectionName: 'username',
-            onPressed: () => editField('username'),
-          ),
+                  // user details
+                  const Padding(
+                    padding: EdgeInsets.only(left: 25.0),
+                    child: Text(
+                      'My Details',
+                      style:
+                          TextStyle(color: Color.fromARGB(255, 110, 110, 110)),
+                    ),
+                  ),
 
-          // bio
-          MyTextBox(
-            text: 'empty bio',
-            sectionName: 'bio',
-            onPressed: () => editField('bio'),
-          ),
-          const SizedBox(height: 40),
+                  // username
+                  MyTextBox(
+                    text: 'matt',
+                    sectionName: 'username',
+                    onPressed: () => editField('username'),
+                  ),
 
-          // user posts
-          const Padding(
-            padding: EdgeInsets.only(left: 25.0),
-            child: Text(
-              'My Groups',
-              style: TextStyle(color: Color.fromARGB(255, 110, 110, 110)),
-            ),
-          ),
-        ],
-      ),
-    );
+                  // bio
+                  MyTextBox(
+                    text: 'empty bio',
+                    sectionName: 'bio',
+                    onPressed: () => editField('bio'),
+                  ),
+                  const SizedBox(height: 40),
+
+                  // user posts
+                  const Padding(
+                    padding: EdgeInsets.only(left: 25.0),
+                    child: Text(
+                      'My Groups',
+                      style:
+                          TextStyle(color: Color.fromARGB(255, 110, 110, 110)),
+                    ),
+                  ),
+                ],
+              );
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text('Error${snapshot.error}'),
+              );
+            }
+
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }),
+        ));
   }
 }
