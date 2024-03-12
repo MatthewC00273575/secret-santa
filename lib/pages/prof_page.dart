@@ -11,11 +11,62 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  //user
+  // user
   final currentUser = FirebaseAuth.instance.currentUser!;
+  // all users
+  final usersCollection = FirebaseFirestore.instance.collection("Users");
 
   // edit field
-  Future<void> editField(String field) async {}
+  Future<void> editField(String field) async {
+    String newValue = "";
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color.fromARGB(255, 56, 56, 56),
+        title: Text(
+          "Edit $field",
+          style: const TextStyle(color: Colors.white),
+        ),
+        content: TextField(
+            autofocus: true,
+            style: const TextStyle(color: Colors.white),
+            decoration: InputDecoration(
+              hintText: "Enter new $field",
+              hintStyle:
+                  const TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+            ),
+            onChanged: (value) {
+              newValue = value;
+            }),
+        actions: [
+          // cancel button
+          TextButton(
+            child: const Text(
+              'Cancel',
+              style: TextStyle(color: Colors.white),
+            ),
+            onPressed: () => Navigator.pop(context),
+          ),
+
+          // save button
+          TextButton(
+            child: const Text(
+              'Save',
+              style: TextStyle(color: Colors.white),
+            ),
+            onPressed: () => Navigator.of(context).pop(newValue),
+          )
+        ],
+      ),
+    );
+
+    //update in firestore
+    if (newValue.trim().isNotEmpty) {
+      // only update if there is somethng in the textfield
+      await usersCollection.doc(currentUser.email).update({field: newValue});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,14 +130,14 @@ class _ProfilePageState extends State<ProfilePage> {
 
                   // username
                   MyTextBox(
-                    text: 'matt',
+                    text: userData['username'],
                     sectionName: 'username',
                     onPressed: () => editField('username'),
                   ),
 
                   // bio
                   MyTextBox(
-                    text: 'empty bio',
+                    text: userData['bio'],
                     sectionName: 'bio',
                     onPressed: () => editField('bio'),
                   ),
