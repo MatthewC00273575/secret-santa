@@ -29,7 +29,7 @@ class GroupName extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // textfield
+              // textfields
               MyTextField(
                   controller: textFieldData,
                   hintText: "e.g Johnson family",
