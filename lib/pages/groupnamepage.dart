@@ -29,6 +29,18 @@ class GroupName extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Container(
+                padding: const EdgeInsetsDirectional.all(20),
+                decoration:
+                    const BoxDecoration(color: Color.fromARGB(255, 75, 75, 75)),
+                child: const Text(
+                  'Give your group a name!',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+
+              const SizedBox(height: 25),
+
               // textfields
               MyTextField(
                   controller: textFieldData,

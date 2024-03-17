@@ -58,7 +58,7 @@ void updateBottomSheet(BuildContext context, name, id, mn, email) {
               const SizedBox(height: 20),
               ElevatedButton(
                   onPressed: () {
-                    dbrefefence.child(id).update({
+                    dbReference.child(id).update({
                       'name': nameController.text.toString(),
                       'mn': mnController.text.toString(),
                       'email': emailController.text.toString(),

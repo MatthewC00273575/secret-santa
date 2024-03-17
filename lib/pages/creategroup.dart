@@ -14,12 +14,27 @@ class CreateGroup extends StatefulWidget {
   State<CreateGroup> createState() => _CreateGroupState();
 }
 
-final dbrefefence = FirebaseDatabase(
+final dbReference = FirebaseDatabase(
   databaseURL:
       'https://secretsantadb-ad295-default-rtdb.europe-west1.firebasedatabase.app/',
 ).reference();
 
 class _CreateGroupState extends State<CreateGroup> {
+  void saveGroup() {
+    // Create a new group with the given name
+    dbReference.child(widget.name).set({
+      'group_name': widget.name,
+      // Add other properties as needed
+    });
+
+    // Display a message or perform other actions
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Group "${widget.name}" created successfully'),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,21 +43,23 @@ class _CreateGroupState extends State<CreateGroup> {
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(240, 49, 29, 19),
         centerTitle: true,
-        title: Builder(
-          builder: (BuildContext context) {
-            return Text(
-              widget.name,
-              style: const TextStyle(color: Color.fromARGB(255, 210, 83, 83)),
-            );
-          },
+        title: Text(
+          widget.name,
+          style: const TextStyle(color: Color.fromARGB(255, 210, 83, 83)),
         ),
+        actions: [
+          IconButton(
+            onPressed: saveGroup,
+            icon: Icon(Icons.save),
+          ),
+        ],
       ),
       // For Read/Display operation
       body: Column(
         children: [
           Expanded(
               child: FirebaseAnimatedList(
-                  query: dbrefefence,
+                  query: dbReference,
                   itemBuilder: (context, snapshot, index, animation) {
                     return Card(
                       shape: RoundedRectangleBorder(
@@ -106,7 +123,7 @@ class _CreateGroupState extends State<CreateGroup> {
                                         onTap: () {
                                           Navigator.pop(
                                               context); // close sheet when done
-                                          dbrefefence
+                                          dbReference
                                               .child(snapshot
                                                   .child('id')
                                                   .value
