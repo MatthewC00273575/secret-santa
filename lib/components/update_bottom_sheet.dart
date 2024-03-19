@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:secretsanta/components/create_bottom_sheet.dart';
-import 'package:secretsanta/pages/creategroup.dart';
+import 'package:secretsanta/pages/create_group_details.dart';
 
 void updateBottomSheet(BuildContext context, name, id, mn, email) {
   nameController.text = name;

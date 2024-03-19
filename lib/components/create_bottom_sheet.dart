@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:secretsanta/pages/creategroup.dart';
+import 'package:secretsanta/pages/create_group_details.dart';
 
 final TextEditingController nameController = TextEditingController();
 final TextEditingController mnController = TextEditingController();

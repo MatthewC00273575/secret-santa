@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:secretsanta/components/create_bottom_sheet.dart';
 import 'package:secretsanta/components/update_bottom_sheet.dart';
 
-class CreateGroup extends StatefulWidget {
+class CreateGroupDetails extends StatefulWidget {
   final String name;
-  const CreateGroup({Key? key, required this.name}) : super(key: key);
+  const CreateGroupDetails({Key? key, required this.name}) : super(key: key);
 
   @override
-  State<CreateGroup> createState() => _CreateGroupState();
+  State<CreateGroupDetails> createState() => _CreateGroupDetails();
 }
 
 final dbReference = FirebaseDatabase(
@@ -19,7 +19,7 @@ final dbReference = FirebaseDatabase(
       'https://secretsantadb-ad295-default-rtdb.europe-west1.firebasedatabase.app/',
 ).reference();
 
-class _CreateGroupState extends State<CreateGroup> {
+class _CreateGroupDetails extends State<CreateGroupDetails> {
   void saveGroup() {
     // Create a new group with the given name
     dbReference.child(widget.name).set({
@@ -54,6 +54,7 @@ class _CreateGroupState extends State<CreateGroup> {
           ),
         ],
       ),
+
       // For Read/Display operation
       body: Column(
         children: [

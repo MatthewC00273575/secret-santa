@@ -143,7 +143,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   const SizedBox(height: 40),
 
-                  // user posts
+                  // user groups
                   const Padding(
                     padding: EdgeInsets.only(left: 25.0),
                     child: Text(

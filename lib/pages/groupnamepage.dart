@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:secretsanta/components/elevatedbutton.dart';
 import 'package:secretsanta/components/my_textfield.dart';
-import 'package:secretsanta/pages/creategroup.dart';
+import 'package:secretsanta/pages/create_group_details.dart';
 
 class GroupName extends StatelessWidget {
   GroupName({Key? key});
@@ -57,7 +57,7 @@ class GroupName extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          CreateGroup(name: textFieldData.text),
+                          CreateGroupDetails(name: textFieldData.text),
                     ),
                   );
                 },
