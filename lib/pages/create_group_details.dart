@@ -39,14 +39,19 @@ class _CreateGroupDetails extends State<CreateGroupDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: const Color.fromARGB(255, 241, 233, 230),
+      backgroundColor: const Color.fromARGB(255, 230, 230, 230),
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(240, 49, 29, 19),
-        centerTitle: true,
-        title: Text(
-          widget.name,
-          style: const TextStyle(color: Color.fromARGB(255, 210, 83, 83)),
+        title: const Padding(
+          padding: EdgeInsets.only(left: 75.0),
+          child: Text(
+            'Secret Santa',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
         ),
+        backgroundColor: const Color.fromARGB(255, 28, 28, 28),
+        iconTheme: const IconThemeData(color: Colors.white),
         actions: [
           IconButton(
             onPressed: saveGroup,
