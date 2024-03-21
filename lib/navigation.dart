@@ -3,7 +3,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:secretsanta/pages/homepage.dart';
 import 'package:secretsanta/pages/inbox_page.dart';
 import 'package:secretsanta/pages/create_group_screen.dart';
-import 'package:secretsanta/pages/wishlist_page.dart';
+import 'package:secretsanta/pages/store_page.dart';
 
 class MyNavigation extends StatefulWidget {
   const MyNavigation({super.key});
@@ -18,7 +18,7 @@ class _HomePageState extends State<MyNavigation> {
   // List of pages you want to navigate to
   final List<Widget> _pages = const [
     HomePage(),
-    MyWishlist(),
+    StorePage(),
     MyInbox(),
     MeProfile(),
   ];
@@ -38,7 +38,7 @@ class _HomePageState extends State<MyNavigation> {
             gap: 8,
             tabs: const [
               GButton(icon: Icons.home, text: 'Home'),
-              GButton(icon: Icons.favorite_border, text: 'Wish List'),
+              GButton(icon: Icons.store, text: 'Store'),
               GButton(icon: Icons.message, text: 'Inbox'),
               GButton(icon: Icons.person, text: 'Me'),
             ],

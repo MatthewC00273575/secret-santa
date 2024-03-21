@@ -61,6 +61,7 @@ class GroupName extends StatelessWidget {
                     ),
                   );
                 },
+                iconData: Icons.arrow_right,
               )
             ],
           ),
