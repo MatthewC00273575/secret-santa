@@ -4,6 +4,7 @@ import 'package:secretsanta/components/drawer.dart';
 import 'package:secretsanta/components/elevatedbutton.dart';
 import 'package:secretsanta/pages/prof_page.dart';
 import 'package:secretsanta/theme/colours.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class StorePage extends StatefulWidget {
   const StorePage({super.key});
@@ -70,11 +71,13 @@ class _StorePage extends State<StorePage> {
                 padding: const EdgeInsets.all(25),
                 child: Row(children: [
                   Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      // promo message
+                      // promo messages
                       Text(
                         'Get 32% Promo',
-                        style: TextStyle(fontSize: 20, color: Colors.white),
+                        style: GoogleFonts.dmSerifDisplay(
+                            fontSize: 20, color: Colors.white),
                       ),
 
                       const SizedBox(height: 20),
@@ -85,7 +88,10 @@ class _StorePage extends State<StorePage> {
                           text: 'Redeem',
                           iconData: Icons.arrow_right),
                     ],
-                  )
+                  ),
+
+                  // image
+                  Image.asset('lib/images/KeyboardImage.png', height: 100),
                 ])),
 
             // search bar

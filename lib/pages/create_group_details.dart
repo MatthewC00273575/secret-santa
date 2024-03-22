@@ -55,7 +55,7 @@ class _CreateGroupDetails extends State<CreateGroupDetails> {
         actions: [
           IconButton(
             onPressed: saveGroup,
-            icon: Icon(Icons.save),
+            icon: const Icon(Icons.save),
           ),
         ],
       ),

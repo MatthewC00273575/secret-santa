@@ -15,7 +15,7 @@ class MyNavigation extends StatefulWidget {
 class _HomePageState extends State<MyNavigation> {
   int _selectedIndex = 0; // To keep track of the selected tab index
 
-  // List of pages you want to navigate to
+  // List of pages to navigate to
   final List<Widget> _pages = const [
     HomePage(),
     StorePage(),
