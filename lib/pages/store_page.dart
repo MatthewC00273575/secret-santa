@@ -139,15 +139,15 @@ class _StorePage extends State<StorePage> {
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: TextField(
                 decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    hintText: "Search here.."),
               ),
             ),
 
@@ -189,30 +189,45 @@ class _StorePage extends State<StorePage> {
               margin: const EdgeInsets.only(left: 25, right: 25, bottom: 25),
               padding: const EdgeInsets.all(20),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   // image
-                  Image.asset(
-                    'lib/images/speakers.png',
-                    height: 60,
-                  ),
-
-                  // name and price
-                  Column(
+                  Row(
                     children: [
-                      // name
-                      Text(
-                        "Logitech Speakers",
-                        style: GoogleFonts.dmSerifDisplay(fontSize: 18),
+                      Image.asset(
+                        'lib/images/speakers.png',
+                        height: 60,
                       ),
 
-                      const SizedBox(height: 10),
+                      const SizedBox(width: 20),
 
-                      //price
-                      Text(
-                        '\$56.00',
-                        style: TextStyle(color: darkGrey),
-                      )
+                      // name and price
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // name
+                          Text(
+                            "Logitech Speakers",
+                            style: GoogleFonts.dmSerifDisplay(fontSize: 18),
+                          ),
+
+                          const SizedBox(height: 10),
+
+                          //price
+                          Text(
+                            '\$56.00',
+                            style: TextStyle(color: darkGrey),
+                          )
+                        ],
+                      ),
                     ],
+                  ),
+
+                  // heart
+                  Icon(
+                    Icons.favorite_outline,
+                    color: darkGrey,
+                    size: 20,
                   )
                 ],
               ),

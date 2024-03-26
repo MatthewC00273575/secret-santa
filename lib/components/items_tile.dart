@@ -21,6 +21,7 @@ class ItemsTile extends StatelessWidget {
       padding: const EdgeInsets.all(25),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           // image
           Image.asset(
