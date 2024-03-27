@@ -1,9 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:secretsanta/pages/create_group_details.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 final TextEditingController nameController = TextEditingController();
-final TextEditingController mnController = TextEditingController();
 final TextEditingController emailController = TextEditingController();
+
+// Assuming you have a userCredential object already
+void createUserDocument() async {
+  final currentUser = FirebaseAuth.instance.currentUser!;
+
+  // Create a reference to the "Users" collection
+  CollectionReference usersCollection =
+      FirebaseFirestore.instance.collection("Users");
+
+  // Create a document reference using the user's email
+  DocumentReference userDocRef = usersCollection.doc(currentUser.email);
+
+  // Create a subcollection within the user document
+  CollectionReference subCollection = userDocRef.collection('group');
+
+  // Create a document within the subcollection
+  DocumentReference groupDocRef =
+      subCollection.doc(nameController.text.toString());
+
+  // Define fields for the widget document
+  Map<String, dynamic> groupData = {
+    "name": nameController.text.toString(),
+    "email": emailController.text.toString(),
+  };
+
+  // Set the data for the widget document
+  await groupDocRef.set(groupData);
+}
 
 void createBottomSheet(BuildContext context) {
   showModalBottomSheet(
@@ -39,14 +67,6 @@ void createBottomSheet(BuildContext context) {
                 ),
               ),
               TextField(
-                keyboardType: TextInputType.number,
-                controller: mnController,
-                decoration: const InputDecoration(
-                  labelText: "member no.",
-                  hintText: "eg.1",
-                ),
-              ),
-              TextField(
                 keyboardType: TextInputType.emailAddress,
                 controller: emailController,
                 decoration: const InputDecoration(
@@ -57,16 +77,9 @@ void createBottomSheet(BuildContext context) {
               const SizedBox(height: 20),
               ElevatedButton(
                   onPressed: () {
-                    final id = DateTime.now().microsecond.toString();
-                    dbReference.child(id).set({
-                      'name': nameController.text.toString(),
-                      'mn': mnController.text.toString(),
-                      'email': emailController.text.toString(),
-                      'id': id,
-                    });
+                    createUserDocument();
                     // For clearing the controllers
                     nameController.clear();
-                    mnController.clear();
                     emailController.clear();
                     // dismiss keyboard after adding items
                     Navigator.pop(context);
