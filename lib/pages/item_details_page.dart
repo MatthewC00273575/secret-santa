@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:secretsanta/components/my_button.dart';
+import 'package:secretsanta/models/shop.dart';
 import 'package:secretsanta/models/store_item.dart';
 import 'package:secretsanta/theme/colours.dart';
 
@@ -34,7 +36,47 @@ class _ItemDetailsPageState extends State<ItemDetailsPage> {
   }
 
   // add to wishlist
-  void addToWish() {}
+  void addToWish() {
+    // only add if there is something to the cart
+    if (quantityCount > 0) {
+      // get access to shop
+      final shop = context.read<Shop>();
+
+      //add to cart
+      shop.addToCart(widget.item, quantityCount);
+
+      // letting user know if it was successful
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => AlertDialog(
+          backgroundColor: accentsColour,
+          content: const Text(
+            "Successfully added to cart",
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+          actions: [
+            // okay button
+            IconButton(
+              onPressed: () {
+                // pop once to remove the dialog box
+                Navigator.pop(context);
+
+                // pop again to go to previus screen
+                Navigator.pop(context);
+              },
+              icon: const Icon(
+                Icons.done,
+                color: Colors.white,
+              ),
+            )
+          ],
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

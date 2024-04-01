@@ -1,16 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:secretsanta/components/drawer.dart';
 import 'package:secretsanta/components/elevatedbutton.dart';
 import 'package:secretsanta/components/items_tile.dart';
-import 'package:secretsanta/models/store_item.dart';
+import 'package:secretsanta/models/shop.dart';
 import 'package:secretsanta/pages/item_details_page.dart';
 import 'package:secretsanta/pages/prof_page.dart';
+import 'package:secretsanta/pages/wishlist_page.dart';
 import 'package:secretsanta/theme/colours.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class StorePage extends StatefulWidget {
-  const StorePage({Key? key}) : super(key: key);
+  const StorePage({super.key});
 
   @override
   State<StorePage> createState() => _StorePage();
@@ -19,40 +21,12 @@ class StorePage extends StatefulWidget {
 class _StorePage extends State<StorePage> {
   final user = FirebaseAuth.instance.currentUser!;
 
-  // store items list
-  List<Item> storeItems = [
-    // flusk
-    Item(
-        name: "Flusk",
-        price: "18.00",
-        imagePath: 'lib/images/flusk.png',
-        rating: "4.8"),
-
-    // charger
-    Item(
-      name: "Cableless Charge",
-      price: "46.00",
-      imagePath: 'lib/images/charger.png',
-      rating: "4.2",
-    ),
-
-    //handbag
-    Item(
-        name: "Handbag",
-        price: "60.00",
-        imagePath: 'lib/images/Handbag-PNG.png',
-        rating: "4.5"),
-
-    // scarf
-    Item(
-        name: "Scarf",
-        price: "24.00",
-        imagePath: 'lib/images/scarf.png',
-        rating: "4.9"),
-  ];
-
   // void navigate to item detail page
   void navigateToItemDetails(int index) {
+    //get the shop and its items
+    final shop = context.read<Shop>();
+    final storeItems = shop.storeItems;
+
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -84,6 +58,10 @@ class _StorePage extends State<StorePage> {
 
   @override
   Widget build(BuildContext context) {
+    //get the shop and its items
+    final shop = context.read<Shop>();
+    final storeItems = shop.storeItems;
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 230, 230, 230),
       appBar: AppBar(
@@ -96,6 +74,16 @@ class _StorePage extends State<StorePage> {
             ),
           ),
         ),
+        actions: [
+          // cart button
+          IconButton(
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const MyWishlist()));
+            },
+            icon: Icon(Icons.shopping_cart),
+          )
+        ],
         backgroundColor: const Color.fromARGB(255, 28, 28, 28),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
