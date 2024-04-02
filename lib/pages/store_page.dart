@@ -7,7 +7,7 @@ import 'package:secretsanta/components/items_tile.dart';
 import 'package:secretsanta/models/shop.dart';
 import 'package:secretsanta/pages/item_details_page.dart';
 import 'package:secretsanta/pages/prof_page.dart';
-import 'package:secretsanta/pages/wishlist_page.dart';
+import 'package:secretsanta/pages/wish_page.dart';
 import 'package:secretsanta/theme/colours.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -81,7 +81,7 @@ class _StorePage extends State<StorePage> {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => const MyWishlist()));
             },
-            icon: Icon(Icons.shopping_cart),
+            icon: const Icon(Icons.shopping_cart),
           )
         ],
         backgroundColor: const Color.fromARGB(255, 28, 28, 28),
