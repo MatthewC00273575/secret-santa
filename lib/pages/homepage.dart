@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:secretsanta/components/drawer.dart';
 import 'package:secretsanta/pages/prof_page.dart';
+import 'package:flutter/services.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,6 +13,15 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final user = FirebaseAuth.instance.currentUser!;
+  final String userProfileDeepLink =
+      'https://secretsanta.flutter.com/user-groups';
+
+  Future<void> copyLinkToClipboard() async {
+    await Clipboard.setData(ClipboardData(text: userProfileDeepLink));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Link copied to clipboard!')),
+    );
+  }
 
   // sign user out method
   void signUserOut() {
@@ -65,6 +75,20 @@ class _HomePageState extends State<HomePage> {
                 "LOGGED IN AS: ${user.email!}",
                 style: const TextStyle(fontSize: 12),
               )),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: copyLinkToClipboard,
+                child: const Text('Copy Link'),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'Welcome to the app!',
+                style: TextStyle(fontSize: 18),
+              ),
+            ],
+          ),
         ],
       ),
     );
