@@ -38,9 +38,16 @@ class _SavedGroupsState extends State<SavedGroups> {
               final bool isCurrentUserCreator = creator == currentUser.email;
 
               return ListTile(
-                title: isCurrentUserCreator
-                    ? Text(groupName)
-                    : Container(), // Display group name only if current user is the creator
+                title: isCurrentUserCreator ? Text(groupName) : Container(),
+                trailing: isCurrentUserCreator
+                    ? IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: () {
+                          // Delete the group when delete button is clicked
+                          deleteGroup(groupName);
+                        },
+                      )
+                    : null,
                 onTap: () {
                   // Navigate to GroupInformationScreen only if the current user is the creator
                   if (isCurrentUserCreator) {
@@ -61,5 +68,39 @@ class _SavedGroupsState extends State<SavedGroups> {
         },
       ),
     );
+  }
+
+  Future<void> deleteGroup(String groupName) async {
+    try {
+      // Delete the group document
+      await FirebaseFirestore.instance
+          .collection("Groups")
+          .doc(groupName)
+          .delete();
+      // Also delete all documents in the 'userGroups' subcollection
+      await FirebaseFirestore.instance
+          .collection("Groups")
+          .doc(groupName)
+          .collection('userGroups')
+          .get()
+          .then((snapshot) {
+        for (DocumentSnapshot ds in snapshot.docs) {
+          ds.reference.delete();
+        }
+      });
+      // Show success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Group $groupName deleted successfully!'),
+        ),
+      );
+    } catch (e) {
+      // Show error message if deletion fails
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to delete group: $e'),
+        ),
+      );
+    }
   }
 }
