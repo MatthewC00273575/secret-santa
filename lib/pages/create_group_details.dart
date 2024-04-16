@@ -5,8 +5,9 @@ import 'package:secretsanta/components/create_bottom_sheet.dart';
 import 'package:secretsanta/components/update_bottom_sheet.dart';
 
 class CreateGroupDetails extends StatefulWidget {
-  final String name;
-  const CreateGroupDetails({Key? key, required this.name}) : super(key: key);
+  const CreateGroupDetails({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<CreateGroupDetails> createState() => _CreateGroupDetails();
