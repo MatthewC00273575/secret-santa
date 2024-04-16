@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:secretsanta/components/drawer.dart';
 import 'package:secretsanta/pages/create_group_details.dart';
-import 'package:secretsanta/pages/groupnamepage.dart';
 import 'package:secretsanta/pages/prof_page.dart';
 
 class MeProfile extends StatefulWidget {

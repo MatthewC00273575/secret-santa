@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:secretsanta/components/drawer.dart';
 import 'package:secretsanta/pages/prof_page.dart';
-import 'package:flutter/services.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({Key? key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -47,14 +47,9 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 230, 230, 230),
       appBar: AppBar(
-        title: const Padding(
-          padding: EdgeInsets.only(left: 75.0),
-          child: Text(
-            'Secret Santa',
-            style: TextStyle(
-              color: Colors.white,
-            ),
-          ),
+        title: const Text(
+          'Secret Santa',
+          style: TextStyle(color: Colors.white),
         ),
         backgroundColor: const Color.fromARGB(255, 28, 28, 28),
         iconTheme: const IconThemeData(color: Colors.white),
@@ -70,24 +65,20 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         children: [
           Padding(
-              padding: const EdgeInsets.all(5),
-              child: Text(
-                "LOGGED IN AS: ${user.email!}",
-                style: const TextStyle(fontSize: 12),
-              )),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: copyLinkToClipboard,
-                child: const Text('Copy Link'),
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                'Welcome to the app!',
-                style: TextStyle(fontSize: 18),
-              ),
-            ],
+            padding: const EdgeInsets.all(5),
+            child: Text(
+              "LOGGED IN AS: ${user.email!}",
+              style: const TextStyle(fontSize: 12),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: copyLinkToClipboard,
+            child: const Text('Copy Link'),
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            'Welcome to the app!',
+            style: TextStyle(fontSize: 18),
           ),
         ],
       ),
