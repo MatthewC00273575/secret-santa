@@ -1,5 +1,8 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class GroupInformationScreen extends StatelessWidget {
   final String groupName;
@@ -16,6 +19,64 @@ class GroupInformationScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(groupName),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.mail),
+            onPressed: () {
+              // open a dialog to invite members to the group
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text(
+                        'Send an email to invite participants to $groupName?'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () async {
+                          // Fetch emails of the stored members in the group
+                          QuerySnapshot membersSnapshot =
+                              await FirebaseFirestore.instance
+                                  .collection("Groups")
+                                  .doc(groupName)
+                                  .collection('userGroups')
+                                  .get();
+
+                          // Extract emails from the snapshot and join them with commas
+                          List<String> emails = membersSnapshot.docs
+                              .map((doc) => doc['email'] as String)
+                              .toList();
+                          String emailsString = emails.join(',');
+
+                          // Construct the email URI with subject and body
+                          final Uri emailUri = Uri(
+                            scheme: 'mailto',
+                            path: emailsString,
+                            query:
+                                'subject=Join my group&body=Click here to join my group',
+                          );
+
+                          // Launch email app with the URI
+                          if (await canLaunch(emailUri.toString())) {
+                            launch(emailUri.toString());
+                          } else {
+                            throw 'Could not launch $emailUri';
+                          }
+                        },
+                        child: const Text('Invite'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(); // Close the dialog
+                        },
+                        child: const Text('Close'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
+        ],
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
