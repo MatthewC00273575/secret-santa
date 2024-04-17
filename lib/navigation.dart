@@ -3,7 +3,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:secretsanta/pages/create_group_screen.dart';
 import 'package:secretsanta/pages/homepage.dart';
 import 'package:secretsanta/pages/saved_groups.dart';
-import 'package:secretsanta/pages/store_page.dart';
+import 'package:secretsanta/pages/wish_page.dart';
 
 class MyNavigation extends StatefulWidget {
   const MyNavigation({super.key});
@@ -17,7 +17,7 @@ class _HomePageState extends State<MyNavigation> {
 
   // List of pages to navigate to
   final List<Widget> _pages = const [
-    StorePage(),
+    MyWishlist(),
     HomePage(),
     SavedGroups(),
     MeProfile(),

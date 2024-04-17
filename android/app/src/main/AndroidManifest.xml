@@ -24,34 +24,14 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
 
+            <meta-data android:name="flutter_deeplinking_enabled" android:value="true" />
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:scheme="https"
-                    android:host="secretsanta.flutter.com"
-                    android:pathPrefix="/user-groups" />
+                <data android:scheme="http" android:host="festiveexchange.page.link"/>
+                <data android:scheme="https" />
             </intent-filter>
-
-            <!-- Provide required visibility configuration for API level 30 and above -->
-            <queries>
-            <!-- If your app checks for SMS support -->
-            <intent>
-                <action android:name="android.intent.action.VIEW" />
-                <data android:scheme="sms" />
-            </intent>
-            <!-- If your app checks for email support -->
-            <intent>
-                <action android:name="android.intent.action.VIEW" />
-                <data android:scheme="mailto" />
-            </intent>
-            <!-- If your application checks for inAppBrowserView launch mode support -->
-            <intent>
-                <action android:name="android.support.customtabs.action.CustomTabsService" />
-            </intent>
-            </queries>
-
         </activity>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
