@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:secretsanta/pages/fetch_profile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class GroupInformationScreen extends StatelessWidget {
@@ -13,6 +14,8 @@ class GroupInformationScreen extends StatelessWidget {
     required this.groupName,
     required this.creator,
   }) : super(key: key);
+  final String userProfileDeepLink =
+      'https://secretsanta.flutter.com/user-groups';
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +55,7 @@ class GroupInformationScreen extends StatelessWidget {
                             scheme: 'mailto',
                             path: emailsString,
                             query:
-                                'subject=Join my group&body=Click here to join my group',
+                                'subject=Join my group&body=Click the link below to join my group \n $userProfileDeepLink',
                           );
 
                           // Launch email app with the URI
@@ -101,9 +104,41 @@ class GroupInformationScreen extends StatelessWidget {
               return ListTile(
                 title: Text(name),
                 subtitle: Text(email),
-                onTap: () {
-                  // Perform action when item is clicked
-                  // For example, navigate to another screen
+                onTap: () async {
+                  // Check if the user exists in Firestore
+                  DocumentSnapshot snapshot = await FirebaseFirestore.instance
+                      .collection('Users')
+                      .doc(email)
+                      .get();
+                  if (snapshot.exists) {
+                    // Navigate to the user's profile page if they exist
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FetchProfile(email: email),
+                      ),
+                    );
+                  } else {
+                    // Display a message if the user does not exist
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('User Does Not Exist'),
+                          content: Text(
+                              'The user with email $email does not exist.'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(); // Close the dialog
+                              },
+                              child: const Text('OK'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
                 },
               );
             },

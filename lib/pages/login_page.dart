@@ -71,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 30),
 
                 // welcome message
-                const Text('Welcome back Santa\'s little helper!',
+                const Text('Welcome back to Festive Exchange!',
                     style: TextStyle(
                       color: Color.fromARGB(255, 45, 210, 4),
                       fontSize: 16,

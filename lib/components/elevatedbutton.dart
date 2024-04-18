@@ -4,11 +4,10 @@ class MyButton2 extends StatelessWidget {
   final Function()? onTap;
   final IconData iconData; // Add this line to include icon data
   const MyButton2(
-      {Key? key,
+      {super.key,
       required this.onTap,
       required this.text,
-      required this.iconData})
-      : super(key: key); // Update constructor
+      required this.iconData}); // Update constructor
 
   final String text;
 
