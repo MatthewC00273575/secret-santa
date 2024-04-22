@@ -41,7 +41,7 @@ class _MeProfile extends State<MeProfile> {
         title: const Padding(
           padding: EdgeInsets.only(left: 75.0),
           child: Text(
-            'Secret Santa',
+            'Festive Exhange',
             style: TextStyle(
               color: Colors.white,
             ),

@@ -10,10 +10,10 @@ class GroupInformationScreen extends StatelessWidget {
   final String creator;
 
   const GroupInformationScreen({
-    Key? key,
+    super.key,
     required this.groupName,
     required this.creator,
-  }) : super(key: key);
+  });
   final String userProfileDeepLink =
       'https://secretsanta.flutter.com/user-groups';
 
@@ -24,7 +24,7 @@ class GroupInformationScreen extends StatelessWidget {
         title: Text(groupName),
         actions: [
           IconButton(
-            icon: Icon(Icons.mail),
+            icon: const Icon(Icons.mail),
             onPressed: () {
               // open a dialog to invite members to the group
               showDialog(
@@ -124,9 +124,9 @@ class GroupInformationScreen extends StatelessWidget {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Text('User Does Not Exist'),
+                          title: const Text('User Has Not Registered'),
                           content: Text(
-                              'The user with email $email does not exist.'),
+                              'The user with email $email has not registered yet.'),
                           actions: <Widget>[
                             TextButton(
                               onPressed: () {

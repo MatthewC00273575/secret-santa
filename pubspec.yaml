@@ -44,6 +44,8 @@ dependencies:
   provider:
   clipboard: ^0.1.3
   url_launcher: ^6.2.6
+  firebase_dynamic_links: ^5.5.2
+  share_plus: ^9.0.0
 
 dev_dependencies:
   flutter_test:
