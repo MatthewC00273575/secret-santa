@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:secretsanta/components/drawer.dart';
 import 'package:secretsanta/pages/group_infopage.dart';
+import 'package:secretsanta/pages/join_group.dart';
 import 'package:secretsanta/pages/prof_page.dart';
 import 'package:secretsanta/theme/colours.dart';
 
@@ -16,21 +17,128 @@ class SavedGroups extends StatefulWidget {
 class _SavedGroupsState extends State<SavedGroups> {
   final User currentUser = FirebaseAuth.instance.currentUser!;
 
-  // sign user out method
   void signUserOut() {
     FirebaseAuth.instance.signOut();
   }
 
-  // navigate to profile page
   void goToProfilePage() {
-    // pop menu drawer
     Navigator.pop(context);
-
-    // go to profile page
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => const ProfilePage(),
+      ),
+    );
+  }
+
+  void _showSearchDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text('Search Groups'),
+              content: SizedBox(
+                width: double.maxFinite, // Ensure content takes full width
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Enter group name',
+                        ),
+                        onChanged: (value) {
+                          // Update the filtered groups and trigger a rebuild
+                          setState(() {
+                            _filteredGroups = _filterGroups(value);
+                          });
+                        },
+                      ),
+                      SizedBox(height: 20),
+                      // Display filtered groups here
+                      ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: _filteredGroups.length,
+                        itemBuilder: (context, index) {
+                          final doc = _filteredGroups[index];
+                          final String groupName = doc['name'];
+                          final String creator = doc['creator'];
+
+                          return ListTile(
+                            title: Text(groupName),
+                            trailing: ElevatedButton(
+                              onPressed: () {
+                                // Implement join group functionality here
+                                joinGroup(context,
+                                    groupName); // Pass context and groupName
+                              },
+                              child: Text('Join'),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    // Reload the dialog box to show the search items
+                    Navigator.of(context).pop();
+                    _showSearchDialog();
+                  },
+                  child: Text('Confirm'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+// Inside your class...
+
+  List<DocumentSnapshot> _filteredGroups = []; // List to hold filtered groups
+
+  List<DocumentSnapshot> _filterGroups(String query) {
+    // Clear the previous filtered groups
+    _filteredGroups.clear();
+
+    // Query Firestore to retrieve groups with names containing the query string
+    FirebaseFirestore.instance
+        .collection('Groups')
+        .where('name', isGreaterThanOrEqualTo: query)
+        .where('name',
+            isLessThanOrEqualTo:
+                query + '\uf8ff') // '\uf8ff' is a high surrogate
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      // Add the filtered groups to the list
+      _filteredGroups.addAll(querySnapshot.docs);
+    }).catchError((error) {
+      // Handle any errors
+      print('Error filtering groups: $error');
+    });
+
+    // Return the filtered groups
+    return _filteredGroups;
+  }
+
+  void joinGroup(BuildContext context, String groupName) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => JoinGroupScreen(groupName: groupName),
       ),
     );
   }
@@ -46,9 +154,13 @@ class _SavedGroupsState extends State<SavedGroups> {
         ),
         backgroundColor: const Color.fromARGB(255, 28, 28, 28),
         iconTheme: const IconThemeData(color: Colors.white),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: _showSearchDialog,
+          ),
+        ],
       ),
-
-      // Side menu
       drawer: MyDrawer(
         onProfileTap: goToProfilePage,
         onSignout: signUserOut,
@@ -111,13 +223,11 @@ class _SavedGroupsState extends State<SavedGroups> {
                             ? IconButton(
                                 icon: Icon(Icons.delete),
                                 onPressed: () {
-                                  // Delete the group when delete button is clicked
                                   deleteGroup(groupName);
                                 },
                               )
                             : null,
                         onTap: () {
-                          // Navigate to GroupInformationScreen only if the current user is the creator
                           if (isCurrentUserCreator) {
                             Navigator.push(
                               context,
@@ -144,12 +254,10 @@ class _SavedGroupsState extends State<SavedGroups> {
 
   Future<void> deleteGroup(String groupName) async {
     try {
-      // Delete the group document
       await FirebaseFirestore.instance
           .collection("Groups")
           .doc(groupName)
           .delete();
-      // Also delete all documents in the 'userGroups' subcollection
       await FirebaseFirestore.instance
           .collection("Groups")
           .doc(groupName)
@@ -160,14 +268,12 @@ class _SavedGroupsState extends State<SavedGroups> {
           ds.reference.delete();
         }
       });
-      // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Group $groupName deleted successfully!'),
         ),
       );
     } catch (e) {
-      // Show error message if deletion fails
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Failed to delete group: $e'),

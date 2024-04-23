@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:secretsanta/components/drawer.dart';
-import 'package:secretsanta/models/dynamic_link.dart';
 import 'package:secretsanta/pages/prof_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:share_plus/share_plus.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key});
@@ -44,12 +42,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void createAndShareDynamicLink() {
-    DynamicLinkProvider().createLink("asdf123ghjk456").then((value) {
-      Share.share(value);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,11 +74,6 @@ class _HomePageState extends State<HomePage> {
           ElevatedButton(
             onPressed: copyLinkToClipboard,
             child: const Text('Copy Link'),
-          ),
-          ElevatedButton(
-            // New button for sharing dynamic link
-            onPressed: createAndShareDynamicLink,
-            child: const Text('Share Dynamic Link'),
           ),
           const SizedBox(height: 16),
           const Text(
