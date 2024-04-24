@@ -30,7 +30,7 @@ class _CreateGroupDetails extends State<CreateGroupDetails> {
     String? result = await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Enter Group Name'),
+        title: const Text('Set Group Rules'),
         content: TextField(
           onChanged: (value) {
             setState(() {
@@ -96,7 +96,7 @@ class _CreateGroupDetails extends State<CreateGroupDetails> {
         title: const Padding(
           padding: EdgeInsets.only(left: 75.0),
           child: Text(
-            'Add participants',
+            'Create Group',
             style: TextStyle(
               color: Colors.white,
             ),
@@ -108,7 +108,7 @@ class _CreateGroupDetails extends State<CreateGroupDetails> {
           FloatingActionButton(
             onPressed: () => saveGroup(context),
             mini: true, // Pass BuildContext
-            child: const Icon(Icons.save),
+            child: const Text("Save"),
           ),
         ],
       ),
@@ -136,21 +136,14 @@ class _CreateGroupDetails extends State<CreateGroupDetails> {
                   itemBuilder: (context, index) {
                     final doc = docs[index];
                     return Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      margin: const EdgeInsets.all(10),
+                      // Other code remains the same...
                       child: ListTile(
                         title: Text(
-                          doc['name'], // Document ID as the title
+                          doc['email'].toString(), // Display email
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
                           ),
-                        ),
-                        subtitle: Text(
-                          doc['email']
-                              .toString(), // Email field as the subtitle
                         ),
                         trailing: PopupMenuButton(
                           icon: const Icon(Icons.more_vert),
@@ -163,7 +156,6 @@ class _CreateGroupDetails extends State<CreateGroupDetails> {
                                   Navigator.pop(context);
                                   updateBottomSheet(
                                     context,
-                                    doc['name'].toString(), // name
                                     doc['email'].toString(), // Email
                                   );
                                 },

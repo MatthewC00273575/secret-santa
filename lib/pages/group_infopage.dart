@@ -11,10 +11,10 @@ class GroupInformationScreen extends StatelessWidget {
   final String creator;
 
   const GroupInformationScreen({
-    Key? key,
+    super.key,
     required this.groupName,
     required this.creator,
-  }) : super(key: key);
+  });
 
   final String userProfileDeepLink =
       'https://secretsanta.flutter.com/user-groups';
@@ -147,13 +147,13 @@ class GroupInformationScreen extends StatelessWidget {
                 },
                 trailing: isCurrentUser
                     ? IconButton(
-                        icon: Icon(Icons.exit_to_app),
+                        icon: const Icon(Icons.exit_to_app),
                         onPressed: () {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                title: Text('Leave Group'),
+                                title: const Text('Leave Group'),
                                 content: Text(
                                     'Are you sure you want to leave $groupName?'),
                                 actions: <Widget>[

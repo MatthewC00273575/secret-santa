@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:secretsanta/components/create_bottom_sheet.dart';
 
-void updateDocument(String name, String email) async {
+void updateDocument(String email) async {
   final currentUser = FirebaseAuth.instance.currentUser!;
   final CollectionReference userCollection =
       FirebaseFirestore.instance.collection("Users");
@@ -12,9 +12,8 @@ void updateDocument(String name, String email) async {
     await userCollection
         .doc(currentUser.email)
         .collection('group')
-        .doc(name)
+        .doc(email) // Use email as the document ID
         .update({
-      'name': name, // Update the 'name' field with the new value
       'email': email, // Update the 'email' field with the new value
     });
     print('Document updated successfully');
@@ -23,9 +22,8 @@ void updateDocument(String name, String email) async {
   }
 }
 
-void updateBottomSheet(BuildContext context, String name, String email) {
+void updateBottomSheet(BuildContext context, String email) {
   // Set initial values for controllers
-  nameController.text = name;
   emailController.text = email;
 
   // Show modal bottom sheet
@@ -55,13 +53,6 @@ void updateBottomSheet(BuildContext context, String name, String email) {
               ),
             ),
             TextField(
-              controller: nameController,
-              decoration: const InputDecoration(
-                labelText: "name",
-                hintText: "eg.Cristiano",
-              ),
-            ),
-            TextField(
               keyboardType: TextInputType.emailAddress,
               controller: emailController,
               decoration: const InputDecoration(
@@ -73,9 +64,8 @@ void updateBottomSheet(BuildContext context, String name, String email) {
             ElevatedButton(
               onPressed: () {
                 // Call updateDocument function with updated values
-                updateDocument(nameController.text, emailController.text);
+                updateDocument(emailController.text);
                 // Clear the controllers
-                nameController.clear();
                 emailController.clear();
                 // Dismiss keyboard after updating
                 Navigator.pop(context);

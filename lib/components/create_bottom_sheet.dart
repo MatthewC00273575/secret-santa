@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-final TextEditingController nameController = TextEditingController();
 final TextEditingController emailController = TextEditingController();
 
 // Assuming you have a userCredential object already
@@ -21,11 +20,10 @@ void createUserDocument() async {
 
   // Create a document within the subcollection
   DocumentReference groupDocRef =
-      subCollection.doc(nameController.text.toString());
+      subCollection.doc(emailController.text.toString());
 
   // Define fields for the widget document
   Map<String, dynamic> groupData = {
-    "name": nameController.text.toString(),
     "email": emailController.text.toString(),
   };
 
@@ -60,13 +58,6 @@ void createBottomSheet(BuildContext context) {
                 ),
               ),
               TextField(
-                controller: nameController,
-                decoration: const InputDecoration(
-                  labelText: "Name",
-                  hintText: "eg.Cristiano",
-                ),
-              ),
-              TextField(
                 keyboardType: TextInputType.emailAddress,
                 controller: emailController,
                 decoration: const InputDecoration(
@@ -79,7 +70,6 @@ void createBottomSheet(BuildContext context) {
                   onPressed: () {
                     createUserDocument();
                     // For clearing the controllers
-                    nameController.clear();
                     emailController.clear();
                     // dismiss keyboard after adding items
                     Navigator.pop(context);
