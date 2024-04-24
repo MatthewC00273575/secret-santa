@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:secretsanta/pages/fetch_profile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -10,10 +11,11 @@ class GroupInformationScreen extends StatelessWidget {
   final String creator;
 
   const GroupInformationScreen({
-    super.key,
+    Key? key,
     required this.groupName,
     required this.creator,
-  });
+  }) : super(key: key);
+
   final String userProfileDeepLink =
       'https://secretsanta.flutter.com/user-groups';
 
@@ -55,7 +57,7 @@ class GroupInformationScreen extends StatelessWidget {
                             scheme: 'mailto',
                             path: emailsString,
                             query:
-                                'subject=Join my group&body=Click the link below to join my group \n $userProfileDeepLink',
+                                'subject=Join my group&body=Click the link below to join my group \n\n $userProfileDeepLink',
                           );
 
                           // Launch email app with the URI
@@ -101,6 +103,9 @@ class GroupInformationScreen extends StatelessWidget {
               final doc = docs[index];
               final String name = doc['name'];
               final String email = doc['email'];
+              final bool isCurrentUser =
+                  email == FirebaseAuth.instance.currentUser!.email;
+
               return ListTile(
                 title: Text(name),
                 subtitle: Text(email),
@@ -140,6 +145,48 @@ class GroupInformationScreen extends StatelessWidget {
                     );
                   }
                 },
+                trailing: isCurrentUser
+                    ? IconButton(
+                        icon: Icon(Icons.exit_to_app),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('Leave Group'),
+                                content: Text(
+                                    'Are you sure you want to leave $groupName?'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () async {
+                                      // Perform leaving group action
+                                      // For simplicity, I'm just deleting the user's entry from the group
+                                      await FirebaseFirestore.instance
+                                          .collection("Groups")
+                                          .doc(groupName)
+                                          .collection('userGroups')
+                                          .doc(doc.id)
+                                          .delete();
+
+                                      Navigator.of(context)
+                                          .pop(); // Close the dialog
+                                    },
+                                    child: const Text('Leave'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pop(); // Close the dialog
+                                    },
+                                    child: const Text('Cancel'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                      )
+                    : null,
               );
             },
           );

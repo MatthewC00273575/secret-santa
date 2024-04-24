@@ -38,7 +38,7 @@ class _SavedGroupsState extends State<SavedGroups> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: Text('Search Groups'),
+              title: const Text('Search Groups'),
               content: SizedBox(
                 width: double.maxFinite, // Ensure content takes full width
                 child: SingleChildScrollView(
@@ -46,7 +46,7 @@ class _SavedGroupsState extends State<SavedGroups> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       TextField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: 'Enter group name',
                         ),
                         onChanged: (value) {
@@ -56,7 +56,7 @@ class _SavedGroupsState extends State<SavedGroups> {
                           });
                         },
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       // Display filtered groups here
                       ListView.builder(
                         shrinkWrap: true,
@@ -64,7 +64,6 @@ class _SavedGroupsState extends State<SavedGroups> {
                         itemBuilder: (context, index) {
                           final doc = _filteredGroups[index];
                           final String groupName = doc['name'];
-                          final String creator = doc['creator'];
 
                           return ListTile(
                             title: Text(groupName),
@@ -143,6 +142,7 @@ class _SavedGroupsState extends State<SavedGroups> {
     );
   }
 
+// Screen
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -201,46 +201,57 @@ class _SavedGroupsState extends State<SavedGroups> {
                   itemBuilder: (context, index) {
                     final doc = docs[index];
                     final String groupName = doc['name'];
-                    final String creator = doc['creator'];
-                    final bool isCurrentUserCreator =
-                        creator == currentUser.email;
 
-                    return Container(
-                      margin: const EdgeInsets.only(
-                          left: 25, right: 25, top: 15, bottom: 15),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: Colors.white,
-                      ),
-                      child: ListTile(
-                        title: isCurrentUserCreator
-                            ? Text(
+                    return StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection("Groups")
+                          .doc(groupName)
+                          .collection('userGroups')
+                          .where('email', isEqualTo: currentUser.email)
+                          .snapshots(),
+                      builder: (context, userGroupSnapshot) {
+                        if (userGroupSnapshot.connectionState ==
+                                ConnectionState.waiting ||
+                            userGroupSnapshot.data == null ||
+                            userGroupSnapshot.data!.docs.isEmpty) {
+                          // If the user's email is not found in userGroups, return an empty container
+                          return Container();
+                        } else {
+                          // If the user's email is found in userGroups, display the group
+                          return Container(
+                            margin: const EdgeInsets.only(
+                                left: 25, right: 25, top: 15, bottom: 15),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: Colors.white,
+                            ),
+                            child: ListTile(
+                              title: Text(
                                 groupName,
                                 style: TextStyle(fontWeight: FontWeight.bold),
-                              )
-                            : Container(),
-                        trailing: isCurrentUserCreator
-                            ? IconButton(
+                              ),
+                              trailing: IconButton(
                                 icon: Icon(Icons.delete),
                                 onPressed: () {
                                   deleteGroup(groupName);
                                 },
-                              )
-                            : null,
-                        onTap: () {
-                          if (isCurrentUserCreator) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => GroupInformationScreen(
-                                  groupName: groupName,
-                                  creator: creator,
-                                ),
                               ),
-                            );
-                          }
-                        },
-                      ),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        GroupInformationScreen(
+                                      groupName: groupName,
+                                      creator: doc['creator'],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        }
+                      },
                     );
                   },
                 );

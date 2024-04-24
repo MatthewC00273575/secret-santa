@@ -49,7 +49,7 @@ class _JoinGroupScreenState extends State<JoinGroupScreen> {
                       .collection('userGroups')
                       .doc(FirebaseAuth.instance.currentUser!.uid)
                       .set({
-                    'displayName': displayName,
+                    'name': displayName,
                     'email': FirebaseAuth.instance.currentUser!.email,
                   }).then((value) {
                     print('User added to the group successfully.');
