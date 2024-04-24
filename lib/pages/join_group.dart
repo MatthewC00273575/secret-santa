@@ -13,6 +13,7 @@ class JoinGroupScreen extends StatefulWidget {
 
 class _JoinGroupScreenState extends State<JoinGroupScreen> {
   String displayName = ''; // Variable to store the entered display name
+  String password = ''; // Variable to store the entered password
 
   @override
   Widget build(BuildContext context) {
@@ -38,31 +39,67 @@ class _JoinGroupScreenState extends State<JoinGroupScreen> {
               ),
             ),
             const SizedBox(height: 20.0),
+            const Text(
+              'Enter the group password:',
+              style: TextStyle(fontSize: 18.0),
+            ),
+            TextField(
+              onChanged: (value) {
+                password = value;
+              },
+              obscureText: false,
+              decoration: const InputDecoration(
+                hintText: 'Password',
+              ),
+            ),
+            const SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
-                // Check if display name is not empty
-                if (displayName.isNotEmpty) {
-                  // Add the user to the group in Firestore
+                // Check if display name and password are not empty
+                if (displayName.isNotEmpty && password.isNotEmpty) {
+                  // Verify password before adding the user to the group
                   FirebaseFirestore.instance
                       .collection('Groups')
                       .doc(widget.groupName)
-                      .collection('userGroups')
-                      .doc(FirebaseAuth.instance.currentUser!.uid)
-                      .set({
-                    'name': displayName,
-                    'email': FirebaseAuth.instance.currentUser!.email,
-                  }).then((value) {
-                    print('User added to the group successfully.');
-                    Navigator.of(context).pop(); // Close the screen
+                      .get()
+                      .then((groupDoc) {
+                    final storedPassword = groupDoc['password'];
+                    if (storedPassword == password) {
+                      // Passwords match, add the user to the group
+                      FirebaseFirestore.instance
+                          .collection('Groups')
+                          .doc(widget.groupName)
+                          .collection('userGroups')
+                          .doc(FirebaseAuth.instance.currentUser!.uid)
+                          .set({
+                        'name': displayName,
+                        'email': FirebaseAuth.instance.currentUser!.email,
+                      }).then((_) {
+                        print('User added to the group successfully.');
+                        Navigator.of(context).pop(); // Close the screen
+                      }).catchError((error) {
+                        // Handle any errors
+                        print('Error adding user to the group: $error');
+                      });
+                    } else {
+                      // Display error message if passwords don't match
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content:
+                              Text('Incorrect password. Please try again.'),
+                        ),
+                      );
+                    }
                   }).catchError((error) {
                     // Handle any errors
-                    print('Error adding user to the group: $error');
+                    print('Error fetching group data: $error');
                   });
                 } else {
-                  // Display an error message if display name is empty
+                  // Display an error message if display name or password is empty
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('Please enter a display name.'),
+                      content:
+                          Text('Please enter both display name and password.'),
                     ),
                   );
                 }

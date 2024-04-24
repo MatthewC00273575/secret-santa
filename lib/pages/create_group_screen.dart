@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:secretsanta/components/drawer.dart';
 import 'package:secretsanta/pages/create_group_details.dart';
 import 'package:secretsanta/pages/prof_page.dart';
+import 'package:secretsanta/theme/colours.dart';
 
 class MeProfile extends StatefulWidget {
   const MeProfile({super.key});
@@ -36,7 +37,8 @@ class _MeProfile extends State<MeProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 230, 230, 230),
+      backgroundColor: accentsColour,
+
       appBar: AppBar(
         title: const Padding(
           padding: EdgeInsets.only(left: 75.0),

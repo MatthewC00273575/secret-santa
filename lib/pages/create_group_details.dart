@@ -5,7 +5,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:secretsanta/components/create_bottom_sheet.dart';
 import 'package:secretsanta/components/update_bottom_sheet.dart';
+import 'package:secretsanta/navigation.dart';
 import 'package:secretsanta/pages/saved_groups.dart';
+import 'package:secretsanta/theme/colours.dart';
 
 class CreateGroupDetails extends StatefulWidget {
   const CreateGroupDetails({
@@ -23,26 +25,79 @@ class _CreateGroupDetails extends State<CreateGroupDetails> {
   final CollectionReference usersCollection =
       FirebaseFirestore.instance.collection("Users");
 
-  String groupName = '';
-
   void saveGroup(BuildContext context) async {
-    // Prompt user for group name
-    String? result = await showDialog(
+    String groupName = ''; // Group name
+    String groupDisplayName = ''; // Group display name
+    String maxGiftPrice = ''; // Maximum gift price
+    String password = ''; // Password
+
+    // Prompt user for group rules
+    bool isSaved = await showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Set Group Rules'),
-        content: TextField(
-          onChanged: (value) {
-            setState(() {
-              groupName = value;
-            });
-          },
-          decoration: const InputDecoration(hintText: 'Group Name'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              onChanged: (value) {
+                setState(() {
+                  groupName = value;
+                });
+              },
+              decoration: const InputDecoration(hintText: 'Group Name'),
+            ),
+            const SizedBox(height: 20),
+            TextField(
+              onChanged: (value) {
+                setState(() {
+                  groupDisplayName = value;
+                });
+              },
+              decoration: const InputDecoration(hintText: 'Group Display Name'),
+            ),
+            const SizedBox(height: 20),
+            TextField(
+              onChanged: (value) {
+                setState(() {
+                  maxGiftPrice = value;
+                });
+              },
+              decoration: const InputDecoration(hintText: 'Max Gift Price'),
+              keyboardType: TextInputType.number,
+            ),
+            const SizedBox(height: 20),
+            TextField(
+              onChanged: (value) {
+                setState(() {
+                  password = value;
+                });
+              },
+              decoration: const InputDecoration(hintText: 'Password'),
+              obscureText: true,
+            ),
+          ],
         ),
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.pop(context, groupName);
+              Navigator.pop(context, false); // Cancel
+            },
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              if (groupName.isNotEmpty &&
+                  groupDisplayName.isNotEmpty &&
+                  maxGiftPrice.isNotEmpty &&
+                  password.isNotEmpty) {
+                Navigator.pop(context, true); // Save
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content:
+                      Text('Please provide all required group information.'),
+                ));
+              }
             },
             child: const Text('Save'),
           ),
@@ -50,39 +105,31 @@ class _CreateGroupDetails extends State<CreateGroupDetails> {
       ),
     );
 
-    // Check if group name is provided
-    if (result != null && result.isNotEmpty) {
-      // Save group information with provided group name
-      await FirebaseFirestore.instance.collection("Groups").doc(result).set({
-        'name': result,
+    // Check if the user saved the group rules
+    if (isSaved) {
+      // Save group information with provided group name and display name
+      await FirebaseFirestore.instance.collection("Groups").doc(groupName).set({
+        'name': groupName,
         'creator': currentUser.email,
-        // Add more fields as needed
+        'max_gift_price': maxGiftPrice,
+        'password': password,
       });
 
-      // Store user's group information in the new group
-      QuerySnapshot userGroupsSnapshot = await FirebaseFirestore.instance
-          .collection("Users")
+      // Store current user's email and display name in the group
+      await FirebaseFirestore.instance
+          .collection("Groups")
+          .doc(groupName)
+          .collection('userGroups')
           .doc(currentUser.email)
-          .collection('group')
-          .get();
-
-      userGroupsSnapshot.docs.forEach((doc) async {
-        await FirebaseFirestore.instance
-            .collection("Groups")
-            .doc(result)
-            .collection('userGroups')
-            .doc(doc.id)
-            .set({
-          'name': doc['name'],
-          'email': doc['email'],
-          // Add more fields as needed
-        });
+          .set({
+        'email': currentUser.email,
+        'name': groupDisplayName,
       });
 
       // Navigate to SavedGroups screen
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const SavedGroups()),
+        MaterialPageRoute(builder: (context) => const MyNavigation()),
       );
     }
   }
@@ -91,7 +138,8 @@ class _CreateGroupDetails extends State<CreateGroupDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: const Color.fromARGB(255, 230, 230, 230),
+      backgroundColor: accentsColour,
+
       appBar: AppBar(
         title: const Padding(
           padding: EdgeInsets.only(left: 75.0),

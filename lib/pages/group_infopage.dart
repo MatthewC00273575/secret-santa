@@ -11,10 +11,10 @@ class GroupInformationScreen extends StatelessWidget {
   final String creator;
 
   const GroupInformationScreen({
-    super.key,
+    Key? key,
     required this.groupName,
     required this.creator,
-  });
+  }) : super(key: key);
 
   final String userProfileDeepLink =
       'https://secretsanta.flutter.com/user-groups';
@@ -28,7 +28,7 @@ class GroupInformationScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.mail),
             onPressed: () {
-              // open a dialog to invite members to the group
+              // Open a dialog to invite members to the group
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -83,114 +83,145 @@ class GroupInformationScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection("Groups")
-            .doc(groupName)
-            .collection('userGroups')
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
-          final docs = snapshot.data!.docs;
-          return ListView.builder(
-            itemCount: docs.length,
-            itemBuilder: (context, index) {
-              final doc = docs[index];
-              final String name = doc['name'];
-              final String email = doc['email'];
-              final bool isCurrentUser =
-                  email == FirebaseAuth.instance.currentUser!.email;
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Text(
+              "You're getting a gift for: ", // Title added here
+              style: TextStyle(fontSize: 18.0),
+            ),
+          ),
+          Expanded(
+            child: StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection("Groups")
+                  .doc(groupName)
+                  .collection('userGroups')
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                }
+                final docs = snapshot.data!.docs;
+                return ListView.builder(
+                  itemCount: docs.length,
+                  itemBuilder: (context, index) {
+                    final doc = docs[index];
+                    final String name = doc['name'];
+                    final String email = doc['email'];
+                    final bool isCurrentUser =
+                        email == FirebaseAuth.instance.currentUser!.email;
 
-              return ListTile(
-                title: Text(name),
-                subtitle: Text(email),
-                onTap: () async {
-                  // Check if the user exists in Firestore
-                  DocumentSnapshot snapshot = await FirebaseFirestore.instance
-                      .collection('Users')
-                      .doc(email)
-                      .get();
-                  if (snapshot.exists) {
-                    // Navigate to the user's profile page if they exist
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => FetchProfile(email: email),
-                      ),
-                    );
-                  } else {
-                    // Display a message if the user does not exist
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: const Text('User Has Not Registered'),
-                          content: Text(
-                              'The user with email $email has not registered yet.'),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop(); // Close the dialog
-                              },
-                              child: const Text('OK'),
+                    return ListTile(
+                      title: Text(name),
+                      subtitle: Text(email),
+                      onTap: () async {
+                        // Check if the user exists in Firestore
+                        DocumentSnapshot snapshot = await FirebaseFirestore
+                            .instance
+                            .collection('Users')
+                            .doc(email)
+                            .get();
+                        if (snapshot.exists) {
+                          // Navigate to the user's profile page if they exist
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => FetchProfile(email: email),
                             ),
-                          ],
-                        );
-                      },
-                    );
-                  }
-                },
-                trailing: isCurrentUser
-                    ? IconButton(
-                        icon: const Icon(Icons.exit_to_app),
-                        onPressed: () {
+                          );
+                        } else {
+                          // Display a message if the user does not exist
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                title: const Text('Leave Group'),
+                                title: const Text('User Has Not Registered'),
                                 content: Text(
-                                    'Are you sure you want to leave $groupName?'),
+                                    'The user with email $email has not registered yet.'),
                                 actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () async {
-                                      // Perform leaving group action
-                                      // For simplicity, I'm just deleting the user's entry from the group
-                                      await FirebaseFirestore.instance
-                                          .collection("Groups")
-                                          .doc(groupName)
-                                          .collection('userGroups')
-                                          .doc(doc.id)
-                                          .delete();
-
-                                      Navigator.of(context)
-                                          .pop(); // Close the dialog
-                                    },
-                                    child: const Text('Leave'),
-                                  ),
                                   TextButton(
                                     onPressed: () {
                                       Navigator.of(context)
                                           .pop(); // Close the dialog
                                     },
-                                    child: const Text('Cancel'),
+                                    child: const Text('OK'),
                                   ),
                                 ],
                               );
                             },
                           );
-                        },
-                      )
-                    : null,
-              );
-            },
+                        }
+                      },
+                      trailing: isCurrentUser
+                          ? IconButton(
+                              icon: const Icon(Icons.exit_to_app),
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text('Leave Group'),
+                                      content: Text(
+                                          'Are you sure you want to leave $groupName?'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () async {
+                                            // Perform leaving group action
+                                            // For simplicity, I'm just deleting the user's entry from the group
+                                            await FirebaseFirestore.instance
+                                                .collection("Groups")
+                                                .doc(groupName)
+                                                .collection('userGroups')
+                                                .doc(doc.id)
+                                                .delete();
+
+                                            Navigator.of(context)
+                                                .pop(); // Close the dialog
+                                            Navigator.of(context)
+                                                .pop(); // Close the dialog
+                                          },
+                                          child: const Text('Leave'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context)
+                                                .pop(); // Close the dialog
+                                          },
+                                          child: const Text('Cancel'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                            )
+                          : null,
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Perform the action to assign Secret Santa
+          // For simplicity, let's just display a snackbar
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Secret Santa assignment completed.'),
+            ),
           );
         },
+        tooltip: 'Assign Secret Santa', // Tooltip added here
+        child: const Icon(Icons.shuffle), // Icon updated to shuffle
       ),
     );
   }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:secretsanta/pages/create_group_screen.dart';
 import 'package:secretsanta/pages/create_wishlist_page.dart';
-import 'package:secretsanta/pages/homepage.dart';
 import 'package:secretsanta/pages/saved_groups.dart';
 
 class MyNavigation extends StatefulWidget {
@@ -18,7 +17,6 @@ class _HomePageState extends State<MyNavigation> {
   // List of pages to navigate to
   final List<Widget> _pages = const [
     SavedGroups(),
-    HomePage(),
     CreateWish(),
     MeProfile(),
   ];
@@ -38,7 +36,6 @@ class _HomePageState extends State<MyNavigation> {
             gap: 8,
             tabs: const [
               GButton(icon: Icons.home, text: 'Home'),
-              GButton(icon: Icons.mail_lock, text: 'invite'),
               GButton(icon: Icons.favorite_rounded, text: 'Wishlist'),
               GButton(icon: Icons.person, text: 'Me'),
             ],
