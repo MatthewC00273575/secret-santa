@@ -1,10 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FetchProfile extends StatelessWidget {
   final String email;
+  final String assignedGiftee;
 
-  const FetchProfile({super.key, required this.email});
+  const FetchProfile(
+      {Key? key, required this.email, required this.assignedGiftee})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +37,9 @@ class FetchProfile extends StatelessWidget {
                 Text('Username: ${userData['username']}'),
                 Text('Age: ${userData['age']}'),
                 Text('Bio: ${userData['bio']}'),
-                // Add more user details as needed
+                if (FirebaseAuth.instance.currentUser!.email == email)
+                  Text(
+                      'Assigned Giftee: $assignedGiftee'), // Display assigned giftee
               ],
             ),
           );

@@ -13,6 +13,7 @@ class JoinGroupScreen extends StatefulWidget {
 
 class _JoinGroupScreenState extends State<JoinGroupScreen> {
   String displayName = ''; // Variable to store the entered display name
+  String assignedGiftee = '';
   String password = ''; // Variable to store the entered password
 
   @override
@@ -74,6 +75,7 @@ class _JoinGroupScreenState extends State<JoinGroupScreen> {
                           .set({
                         'name': displayName,
                         'email': FirebaseAuth.instance.currentUser!.email,
+                        'assignedGiftee': assignedGiftee,
                       }).then((_) {
                         print('User added to the group successfully.');
                         Navigator.of(context).pop(); // Close the screen

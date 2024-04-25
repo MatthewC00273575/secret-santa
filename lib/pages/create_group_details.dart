@@ -6,7 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:secretsanta/components/create_bottom_sheet.dart';
 import 'package:secretsanta/components/update_bottom_sheet.dart';
 import 'package:secretsanta/navigation.dart';
-import 'package:secretsanta/pages/saved_groups.dart';
 import 'package:secretsanta/theme/colours.dart';
 
 class CreateGroupDetails extends StatefulWidget {
@@ -27,6 +26,7 @@ class _CreateGroupDetails extends State<CreateGroupDetails> {
 
   void saveGroup(BuildContext context) async {
     String groupName = ''; // Group name
+    String assignedGiftee = '';
     String groupDisplayName = ''; // Group display name
     String maxGiftPrice = ''; // Maximum gift price
     String password = ''; // Password
@@ -124,6 +124,7 @@ class _CreateGroupDetails extends State<CreateGroupDetails> {
           .set({
         'email': currentUser.email,
         'name': groupDisplayName,
+        'assignedGiftee': assignedGiftee
       });
 
       // Navigate to SavedGroups screen

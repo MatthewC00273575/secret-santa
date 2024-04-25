@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:secretsanta/pages/fetch_profile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class GroupInformationScreen extends StatelessWidget {
+class GroupInformationScreen extends StatefulWidget {
   final String groupName;
   final String creator;
 
@@ -16,14 +16,21 @@ class GroupInformationScreen extends StatelessWidget {
     required this.creator,
   }) : super(key: key);
 
+  @override
+  State<GroupInformationScreen> createState() => _GroupInformationScreenState();
+}
+
+class _GroupInformationScreenState extends State<GroupInformationScreen> {
   final String userProfileDeepLink =
       'https://secretsanta.flutter.com/user-groups';
 
   @override
   Widget build(BuildContext context) {
+    bool isCreator = FirebaseAuth.instance.currentUser!.email == widget.creator;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(groupName),
+        title: Text(widget.groupName),
         actions: [
           IconButton(
             icon: const Icon(Icons.mail),
@@ -34,7 +41,7 @@ class GroupInformationScreen extends StatelessWidget {
                 builder: (BuildContext context) {
                   return AlertDialog(
                     title: Text(
-                        'Send an email to invite participants to $groupName?'),
+                        'Send an email to invite participants to ${widget.groupName}?'),
                     actions: <Widget>[
                       TextButton(
                         onPressed: () async {
@@ -42,7 +49,7 @@ class GroupInformationScreen extends StatelessWidget {
                           QuerySnapshot membersSnapshot =
                               await FirebaseFirestore.instance
                                   .collection("Groups")
-                                  .doc(groupName)
+                                  .doc(widget.groupName)
                                   .collection('userGroups')
                                   .get();
 
@@ -89,15 +96,15 @@ class GroupInformationScreen extends StatelessWidget {
           const Padding(
             padding: EdgeInsets.all(16.0),
             child: Text(
-              "You're getting a gift for: ", // Title added here
-              style: TextStyle(fontSize: 18.0),
+              "Note:\nClick your name to see who you're getting a gift for ", // Title added here
+              style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold),
             ),
           ),
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection("Groups")
-                  .doc(groupName)
+                  .doc(widget.groupName)
                   .collection('userGroups')
                   .snapshots(),
               builder: (context, snapshot) {
@@ -132,7 +139,11 @@ class GroupInformationScreen extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => FetchProfile(email: email),
+                              builder: (context) => FetchProfile(
+                                email: email,
+                                assignedGiftee: doc['assignedGiftee'] ??
+                                    '', // Pass assigned giftee data
+                              ),
                             ),
                           );
                         } else {
@@ -168,7 +179,7 @@ class GroupInformationScreen extends StatelessWidget {
                                     return AlertDialog(
                                       title: const Text('Leave Group'),
                                       content: Text(
-                                          'Are you sure you want to leave $groupName?'),
+                                          'Are you sure you want to leave ${widget.groupName}?'),
                                       actions: <Widget>[
                                         TextButton(
                                           onPressed: () async {
@@ -176,7 +187,7 @@ class GroupInformationScreen extends StatelessWidget {
                                             // For simplicity, I'm just deleting the user's entry from the group
                                             await FirebaseFirestore.instance
                                                 .collection("Groups")
-                                                .doc(groupName)
+                                                .doc(widget.groupName)
                                                 .collection('userGroups')
                                                 .doc(doc.id)
                                                 .delete();
@@ -210,19 +221,52 @@ class GroupInformationScreen extends StatelessWidget {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Perform the action to assign Secret Santa
-          // For simplicity, let's just display a snackbar
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Secret Santa assignment completed.'),
-            ),
-          );
-        },
-        tooltip: 'Assign Secret Santa', // Tooltip added here
-        child: const Icon(Icons.shuffle), // Icon updated to shuffle
-      ),
+      floatingActionButton: isCreator
+          ? FloatingActionButton(
+              onPressed: () async {
+                // Fetch the list of participants
+                QuerySnapshot membersSnapshot = await FirebaseFirestore.instance
+                    .collection("Groups")
+                    .doc(widget.groupName)
+                    .collection('userGroups')
+                    .get();
+
+                // Extract names and emails from the snapshot
+                List<Map<String, dynamic>> participants = membersSnapshot.docs
+                    .map((doc) => {
+                          'docId': doc.id,
+                          'name': doc['name'] as String,
+                          'email': doc['email'] as String,
+                        })
+                    .toList();
+
+                // Randomly shuffle the participants
+                participants.shuffle();
+
+                // Update the Firestore documents for each participant
+                for (int i = 0; i < participants.length; i++) {
+                  String assignedGiftee =
+                      participants[(i + 1) % participants.length]['name'];
+
+                  // Update the Firestore document with the assigned recipient
+                  await FirebaseFirestore.instance
+                      .collection("Groups")
+                      .doc(widget.groupName)
+                      .collection('userGroups')
+                      .doc(participants[i]['docId'])
+                      .update({'assignedGiftee': assignedGiftee});
+                }
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Secret Santa assignment completed.'),
+                  ),
+                );
+              },
+              tooltip: 'Assign Secret Santa', // Tooltip added here
+              child: const Icon(Icons.shuffle), // Icon= shuffle button
+            )
+          : null,
     );
   }
 }
