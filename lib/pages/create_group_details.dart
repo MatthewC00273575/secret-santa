@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,22 +7,61 @@ import 'package:secretsanta/components/create_bottom_sheet.dart';
 import 'package:secretsanta/components/update_bottom_sheet.dart';
 import 'package:secretsanta/navigation.dart';
 import 'package:secretsanta/theme/colours.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CreateGroupDetails extends StatefulWidget {
   const CreateGroupDetails({
-    super.key,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<CreateGroupDetails> createState() => _CreateGroupDetails();
 }
 
 class _CreateGroupDetails extends State<CreateGroupDetails> {
+  final String userProfileDeepLink =
+      'https://secretsanta.flutter.com/user-groups';
   // User
   final User currentUser = FirebaseAuth.instance.currentUser!;
   // Firestore collection reference
   final CollectionReference usersCollection =
       FirebaseFirestore.instance.collection("Users");
+
+  void sendInvitationEmail(
+    String groupName,
+    String password,
+    String maxGiftPrice,
+  ) async {
+    // Fetch emails of the stored members in the group
+    QuerySnapshot membersSnapshot = await FirebaseFirestore.instance
+        .collection("Users")
+        .doc(currentUser.email)
+        .collection('group')
+        .get();
+
+    // Extract emails from the snapshot and join them with commas
+    List<String> emails =
+        membersSnapshot.docs.map((doc) => doc['email'] as String).toList();
+    String emailsString = emails.join(',');
+
+    // Construct the email URI with subject and body
+    final Uri emailUri = Uri(
+      scheme: 'mailto',
+      path: emailsString,
+      query:
+          'subject=Join my group&body=Hey!! I\'m inviting you to join my Secret Santa group'
+          '\nClick the link below to join my group '
+          '\n $userProfileDeepLink \n\n Search for my group in the app. \nGroup name: $groupName \nPassword: $password'
+          '\n\n Rules: \nMax Gift Price: €$maxGiftPrice',
+    );
+
+    // Launch email app with the URI
+    if (await canLaunch(emailUri.toString())) {
+      launch(emailUri.toString());
+    } else {
+      throw 'Could not launch $emailUri';
+    }
+  }
 
   void saveGroup(BuildContext context) async {
     String groupName = ''; // Group name
@@ -126,6 +165,9 @@ class _CreateGroupDetails extends State<CreateGroupDetails> {
         'name': groupDisplayName,
         'assignedGiftee': assignedGiftee
       });
+
+      // Send invitation emails
+      sendInvitationEmail(groupName, password, maxGiftPrice);
 
       // Navigate to SavedGroups screen
       Navigator.pushReplacement(

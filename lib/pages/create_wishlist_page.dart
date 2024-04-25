@@ -75,7 +75,7 @@ class _CreateWishState extends State<CreateWish> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      "Create a wishlist",
+                      "My Wishlist",
                       style: TextStyle(
                         fontSize: 18.0,
                         fontWeight: FontWeight.bold,

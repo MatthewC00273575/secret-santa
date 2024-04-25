@@ -79,6 +79,7 @@ class _JoinGroupScreenState extends State<JoinGroupScreen> {
                       }).then((_) {
                         print('User added to the group successfully.');
                         Navigator.of(context).pop(); // Close the screen
+                        Navigator.of(context).pop(); // Close the screen
                       }).catchError((error) {
                         // Handle any errors
                         print('Error adding user to the group: $error');

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:secretsanta/pages/fetch_profile.dart';
+import 'package:secretsanta/theme/colours.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class GroupInformationScreen extends StatefulWidget {
@@ -29,8 +30,14 @@ class _GroupInformationScreenState extends State<GroupInformationScreen> {
     bool isCreator = FirebaseAuth.instance.currentUser!.email == widget.creator;
 
     return Scaffold(
+      backgroundColor: primaryColour,
       appBar: AppBar(
-        title: Text(widget.groupName),
+        iconTheme: const IconThemeData(color: Colors.white),
+        backgroundColor: appBarColor,
+        title: Text(
+          widget.groupName,
+          style: const TextStyle(color: Colors.white),
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.mail),
@@ -125,7 +132,10 @@ class _GroupInformationScreenState extends State<GroupInformationScreen> {
                         email == FirebaseAuth.instance.currentUser!.email;
 
                     return ListTile(
-                      title: Text(name),
+                      title: Text(
+                        name,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
                       subtitle: Text(email),
                       onTap: () async {
                         // Check if the user exists in Firestore

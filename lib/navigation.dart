@@ -37,7 +37,7 @@ class _HomePageState extends State<MyNavigation> {
             tabs: const [
               GButton(icon: Icons.home, text: 'Home'),
               GButton(icon: Icons.favorite_rounded, text: 'Wishlist'),
-              GButton(icon: Icons.person, text: 'Me'),
+              GButton(icon: Icons.people, text: 'Groups'),
             ],
             selectedIndex: _selectedIndex,
             onTabChange: (index) {

@@ -149,16 +149,6 @@ class _ProfilePageState extends State<ProfilePage> {
                     onPressed: () => editField('bio'),
                   ),
                   const SizedBox(height: 40),
-
-                  // user groups
-                  const Padding(
-                    padding: EdgeInsets.only(left: 25.0),
-                    child: Text(
-                      'My Groups',
-                      style:
-                          TextStyle(color: Color.fromARGB(255, 110, 110, 110)),
-                    ),
-                  ),
                 ],
               );
             } else if (snapshot.hasError) {

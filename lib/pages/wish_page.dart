@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:secretsanta/theme/colours.dart';
 
 class MyWishlist extends StatefulWidget {
-  const MyWishlist({Key? key}) : super(key: key);
+  const MyWishlist({super.key});
 
   @override
   _MyWishlistState createState() => _MyWishlistState();
 }
 
 class _MyWishlistState extends State<MyWishlist> {
-  final TextEditingController _searchController = TextEditingController();
   final TextEditingController _itemNameController = TextEditingController();
   final TextEditingController _itemDescriptionController =
       TextEditingController();
@@ -51,19 +51,6 @@ class _MyWishlistState extends State<MyWishlist> {
     }
   }
 
-  void saveWishlist() async {
-    // Save current wishlist data to SavedWish collection
-    QuerySnapshot currentItemsSnapshot =
-        await wishlistCollection.doc(userEmail).collection('items').get();
-
-    currentItemsSnapshot.docs.forEach((doc) async {
-      await savedWishlistCollection
-          .doc(userEmail)
-          .collection('items')
-          .add(doc.data() as Map<String, dynamic>);
-    });
-  }
-
   void editWishlist(String newName, String newDescription) async {
     await wishlistCollection.doc(userEmail).set({
       'name': newName,
@@ -77,8 +64,14 @@ class _MyWishlistState extends State<MyWishlist> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: accentsColour,
       appBar: AppBar(
-        title: Text(wishlistName),
+        backgroundColor: const Color.fromARGB(255, 28, 28, 28),
+        title: Text(
+          wishlistName,
+          style: const TextStyle(color: Colors.white),
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
         actions: [
           IconButton(
             onPressed: () {
@@ -86,19 +79,23 @@ class _MyWishlistState extends State<MyWishlist> {
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
-                  title: Text('Edit Wishlist'),
+                  title: const Text(
+                    'Edit Wishlist',
+                    style: TextStyle(),
+                  ),
                   content: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       TextField(
                         controller: TextEditingController(text: wishlistName),
-                        decoration: InputDecoration(labelText: 'Wishlist Name'),
+                        decoration:
+                            const InputDecoration(labelText: 'Wishlist Name'),
                         onChanged: (value) => wishlistName = value,
                       ),
                       TextField(
                         controller: TextEditingController(),
-                        decoration:
-                            InputDecoration(labelText: 'Wishlist Description'),
+                        decoration: const InputDecoration(
+                            labelText: 'Wishlist Description'),
                         onChanged: (value) {},
                       ),
                     ],
@@ -109,17 +106,13 @@ class _MyWishlistState extends State<MyWishlist> {
                         editWishlist(wishlistName, '');
                         Navigator.pop(context);
                       },
-                      child: Text('Save'),
+                      child: const Text('Save'),
                     ),
                   ],
                 ),
               );
             },
-            icon: Icon(Icons.edit),
-          ),
-          IconButton(
-            onPressed: saveWishlist,
-            icon: Icon(Icons.save),
+            icon: const Icon(Icons.edit),
           ),
         ],
       ),
@@ -130,11 +123,15 @@ class _MyWishlistState extends State<MyWishlist> {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _searchController,
-                      decoration: InputDecoration(
-                        hintText: 'Search this wishlist',
+                  const Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 20.0),
+                      child: Text(
+                        "Add to this wish list",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
                       ),
                     ),
                   ),
@@ -144,18 +141,18 @@ class _MyWishlistState extends State<MyWishlist> {
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
-                          title: Text('Add Item'),
+                          title: const Text('Add Item'),
                           content: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               TextField(
                                 controller: _itemNameController,
-                                decoration:
-                                    InputDecoration(labelText: 'Item Name'),
+                                decoration: const InputDecoration(
+                                    labelText: 'Item Name'),
                               ),
                               TextField(
                                 controller: _itemDescriptionController,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                     labelText: 'Item Description'),
                               ),
                             ],
@@ -166,13 +163,13 @@ class _MyWishlistState extends State<MyWishlist> {
                                 addItem();
                                 Navigator.pop(context);
                               },
-                              child: Text('Add'),
+                              child: const Text('Add'),
                             ),
                           ],
                         ),
                       );
                     },
-                    icon: Icon(Icons.add),
+                    icon: const Icon(Icons.add),
                   ),
                 ],
               ),
@@ -184,7 +181,7 @@ class _MyWishlistState extends State<MyWishlist> {
                   .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
                 if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
@@ -192,7 +189,7 @@ class _MyWishlistState extends State<MyWishlist> {
                 final docs = snapshot.data!.docs;
                 return ListView.builder(
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: docs.length,
                   itemBuilder: (context, index) {
                     final doc = docs[index];
@@ -211,7 +208,7 @@ class _MyWishlistState extends State<MyWishlist> {
                               .catchError((error) =>
                                   print("Failed to delete item: $error"));
                         },
-                        icon: Icon(Icons.delete),
+                        icon: const Icon(Icons.delete),
                       ),
                     );
                   },

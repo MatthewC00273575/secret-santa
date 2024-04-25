@@ -6,13 +6,13 @@ import 'package:secretsanta/pages/prof_page.dart';
 import 'package:secretsanta/theme/colours.dart';
 
 class MeProfile extends StatefulWidget {
-  const MeProfile({super.key});
+  const MeProfile({Key? key});
 
   @override
-  State<MeProfile> createState() => _MeProfile();
+  State<MeProfile> createState() => _MeProfileState();
 }
 
-class _MeProfile extends State<MeProfile> {
+class _MeProfileState extends State<MeProfile> {
   final user = FirebaseAuth.instance.currentUser!;
 
   // sign user out method
@@ -38,80 +38,69 @@ class _MeProfile extends State<MeProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: accentsColour,
-
       appBar: AppBar(
-        title: const Padding(
-          padding: EdgeInsets.only(left: 75.0),
-          child: Text(
-            'Festive Exhange',
-            style: TextStyle(
-              color: Colors.white,
-            ),
-          ),
+        title: const Text(
+          'Festive Exchange',
+          style: TextStyle(color: Colors.white),
         ),
         backgroundColor: const Color.fromARGB(255, 28, 28, 28),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-
       // Side menu
       drawer: MyDrawer(
         onProfileTap: goToProfilePage,
         onSignout: signUserOut,
       ),
-
       // Main body
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
-              Icons.person,
-              size: 75,
-            ),
-            const SizedBox(height: 50),
-
+            Image.asset('lib/images/christmas-icon-png-17.jpg', height: 200),
+            const SizedBox(height: 20),
             Container(
               padding: const EdgeInsets.all(20),
-              margin: const EdgeInsets.symmetric(horizontal: 60),
+              margin: const EdgeInsets.symmetric(horizontal: 30),
               decoration: BoxDecoration(
                 color: const Color.fromARGB(240, 49, 29, 19),
                 borderRadius: BorderRadius.circular(15),
               ),
-              child: RichText(
-                text: const TextSpan(
-                  children: [
-                    TextSpan(
-                      text:
-                          'I\'m here to help you organize your celebration quickly and easily.',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Color.fromARGB(255, 229, 213, 231),
-                      ),
+              child: const Column(
+                children: [
+                  Text(
+                    'Welcome to Festive Exchange!',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
                     ),
-                    TextSpan(
-                      text: '\n \nClick below to get started!',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Color.fromARGB(255, 210, 83, 83),
-                      ),
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    'Organize your celebration quickly and easily with us.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 16),
-
-            //create group button
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 84, 145, 152),
-                padding: const EdgeInsets.all(20),
-              ),
-              child: const Text(
-                'Create group',
-                style: TextStyle(
-                  color: Color.fromARGB(255, 229, 213, 231),
-                  fontSize: 15,
+            const SizedBox(height: 40),
+            TextButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(
+                  const Color.fromARGB(255, 84, 145, 152),
+                ),
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                padding: MaterialStateProperty.all<EdgeInsets>(
+                  const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+                ),
+                shape: MaterialStateProperty.all<OutlinedBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
                 ),
               ),
               onPressed: () {
@@ -121,9 +110,11 @@ class _MeProfile extends State<MeProfile> {
                       builder: (context) => const CreateGroupDetails()),
                 );
               },
+              child: const Text(
+                'Get Started',
+                style: TextStyle(fontSize: 18),
+              ),
             ),
-
-            const SizedBox(height: 16),
           ],
         ),
       ),
